@@ -1,0 +1,66 @@
+{% from 'admin/component.html.twig' import button,link %}
+<div id="index-view">
+    <div id="index-view-header">
+        {% if add is defined %}
+            {{ link("Ajouter",{url:add,icon:'icon-plus',className:'success upper'}) }}
+        {% endif %}
+    </div>
+    {% if info is defined %}
+        {% if info[0] > 0 %}
+            <div id="index-view-body">
+                <div id="index-view-body-search">
+                    <div>
+                        <h4>
+                            <strong>{{ info[0] }}</strong>
+                            {{ info[1] }}
+                        </h4>
+                    </div>
+                    <div>
+                        <input type="search" placeholder="Recherche..." id="index-view-body-search-field">
+                        <label for="index-view-body-search-field" class="icon-search"></label>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        {% if header is defined %}
+                            {% for _th in header %}
+                                <th> {{ _th }} </th>
+                            {% endfor %}
+                        {% endif %}
+                        <th class="kh-action">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% block body %} {% endblock %}
+                    </tbody>
+                </table>
+                {% if state > 1 %}
+                    <div id="index-view-body-paginate">
+                        {# <a href="#" class="icon-arrow-left2" title="Précédent"></a>
+            <a href="#" class="icon-arrow-right2" title="Suivant"></a> #}
+                        <div id="index-view-body-paginate-state">
+                            {{ app.request.get('page') ?? 1 }}/<strong>{{ state }}</strong>
+                            <span class="icon-file-text2"></span>
+                        </div>
+                        <div id="index-view-body-paginate-link">
+                            {{ app.request.uri | previous(app.request.get('page') ?? 1) | raw }}
+                            {{ app.request.uri | next(app.request.get('page') ?? 1,state) | raw }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div id="index-view-body-table-bottom"></div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div id="index-view-body">
+                <div id="index-view-body-empty">
+                   <div>
+                       {% include "admin/components/svg/empty.svg" %}
+                       <h3>Aucune donnée trouvée...</h3>
+                   </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

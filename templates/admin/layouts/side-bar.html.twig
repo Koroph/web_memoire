@@ -1,0 +1,33 @@
+{% from 'admin/component.html.twig' import side_bar_link_item %}
+<div id="kh-app-side-bar">
+    <header id="kh-app-side-bar-header">
+        <div>
+            <div>
+                <img src="{{ asset('system/logo/64/logo.png') }}"
+                     width="64"
+                     height="64"
+                     decoding="async"
+                     alt="{{ app_name }}">
+            </div>
+            <strong>
+                {{ app_name }}
+            </strong>
+        </div>
+    </header>
+    <div id="kh-app-side-bar-link">
+         {#{{ side_bar_link_item("Accueil","admin_home",{icon:'icon-home2'}) }}
+        <div class="divider"></div>#}
+        {{ side_bar_link_item("Materiel","equipment",{icon:'icon-books'}) }}
+        {{ side_bar_link_item("Panne","breakdown",{icon:'icon-stack'}) }}
+        {{ side_bar_link_item("Maintenance","maintenance",{icon:'icon-price-tags'}) }}
+        <div class="divider"></div>
+        {{ side_bar_link_item("Personnel","user_admin",{icon:'icon-user-tie'}) }}
+        {{ side_bar_link_item("Fonction","work_function",{icon:'icon-flag'}) }}
+        {{ side_bar_link_item("Service","service",{icon:'icon-bookmarks'}) }}
+        <div class="divider"></div>
+        {{ side_bar_link_item("Maintenancier","maintainer",{icon:'icon-users'}) }}
+    </div>
+</div>
+
+
+

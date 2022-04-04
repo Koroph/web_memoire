@@ -1,0 +1,15 @@
+{
+  "build/admin.css": "/build/admin.css",
+  "build/admin.js": "/build/admin.js",
+  "build/login.css": "/build/login.css",
+  "build/login.js": "/build/login.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_core-js_modules_es_date_to-string_js-node_modules_core-js_modules_es_obj-9d2f59.js": "/build/vendors-node_modules_core-js_modules_es_date_to-string_js-node_modules_core-js_modules_es_obj-9d2f59.js",
+  "build/vendors-node_modules_axios_index_js-node_modules_chart_js_dist_chart_esm_js-node_modules_core-1a39a4.js": "/build/vendors-node_modules_axios_index_js-node_modules_chart_js_dist_chart_esm_js-node_modules_core-1a39a4.js",
+  "build/assets_scss_font_style_css.css": "/build/assets_scss_font_style_css.css",
+  "build/images/login.jpg": "/build/images/login.eb3724cd.jpg",
+  "build/images/icomoon.svg?5namkh": "/build/images/icomoon.0c12df59.svg",
+  "build/fonts/icomoon.eot?5namkh": "/build/fonts/icomoon.4d6152e8.eot",
+  "build/fonts/icomoon.woff?5namkh": "/build/fonts/icomoon.42d1f953.woff",
+  "build/fonts/icomoon.ttf?5namkh": "/build/fonts/icomoon.abf98833.ttf"
+}

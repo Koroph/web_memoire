@@ -1,0 +1,29 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate,state as vState %}
+
+{% block content %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Nom','Date de création'],add:path('service.create'),state:data.state,'info':[data.allCount,"Services enrégistrés"]} %}
+        {% block body %}
+            {% for service in data %}
+                    <tr class="kh-t-row"
+                        data-keys="name,date"
+                        data-name="{{ service.name }}"
+                        data-date="{{ service.created|date("d/m/Y") }}">
+                        <td>{{ service.name }}</td>
+                        <td style="width: 200px;">
+                            <span class=" icon-calendar"></span>
+                            {{ service.created|date("d/m/Y") }}
+                        </td>
+                        {{ tr_action(path('service.show',{id:service.id}),path('service.edit',{id:service.id}),path('service.destroy',{id:service.id,page:app.request.get('page') ?? 1})) | raw }}
+                    </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Services
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('service.index'),label:'Services'}]) }}
+{% endblock %}

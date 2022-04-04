@@ -1,0 +1,32 @@
+.toggle-link{
+  display: inline-block;
+  padding: 4px 0;
+  text-align: center;
+  color: $white;
+  border-radius: 2px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 600;
+  width: 118px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  &:hover{
+    color: $white;
+    text-decoration: none;
+  }
+  &.enable{
+    background-color: rgba($success,0.5);
+    border-left: 6px solid $success;
+  }
+  &.disable{
+    background-color: rgba($danger,0.5);
+    border-left: 6px solid $danger;
+  }
+  &.warning{
+    background-color: rgba($warning,0.5);
+    border-left: 6px solid $warning;
+  }
+  &.orange{
+    background-color: rgba($orange,0.5);
+    border-left: 6px solid $orange;
+  }
+}

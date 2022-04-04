@@ -1,0 +1,56 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,text,dateView,link %}
+
+
+{% block content %}
+    {% set _body %}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ text("Designation du materiel",maintenance.breakdown.equipment.name) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ text("Maintenancier",maintenance.maintainer.name ) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ text("Debut de la maintenance ",maintenance.dateStart|date('d-m-Y') ) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ text("Debut de la maintenance",maintenance.dateEnd|date('d-m-Y') ) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ text("Prix de la prestation du maintenancie",maintenance.price~" FCFA") }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-8">
+                {{ text("Detail supplementaire",maintenance.description) }}
+            </div>
+        </div>
+        {{ dateView(maintenance) }}
+        {% set _action %}
+            <div style="display: flex;">
+                <div>
+                    {{ link("EN BONNE ETAT",{url:path("update.status",{id:maintenance.breakdown.equipment.id,status:"be"}),className:'success upper'}) }}
+                </div>
+                <div style="margin-left: 8px">
+                    {{ link("A REMPLACER",{url:path("update.status",{id:maintenance.breakdown.equipment.id,status:"re"}),className:'danger upper'}) }}
+                </div>
+            </div>
+        {% endset %}
+
+        {{ text("Modification du status du materiel",_action|raw) }}
+    {% endset %}
+
+    {% embed "admin/components/display-view.html.twig" with {edit:path('maintenance.edit',{id:maintenance.id}),delete:{url:path('maintenance.destroy',{id:maintenance.id})}} %}
+        {% block body %} {{ _body }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Information
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('maintenance.index'),label:'Maintenance'},{url:path('maintenance.show',{id:maintenance.id}),label:'Informations'}]) }}
+{% endblock %}

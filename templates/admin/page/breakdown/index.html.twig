@@ -1,0 +1,48 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate,state as vState %}
+{% block content %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Désignation du matériel','Date de soumission',"Statut du matériel"],add:path('breakdown.create'),state:data.state,'info':[data.allCount,"Pannes enrégistrés"]} %}
+        {% block body %}
+            {% for breakdown in data %}
+                    <tr class="kh-t-row"
+                        data-keys="name,date"
+                        data-name="nom du matériel"
+                        data-date="{{ breakdown.created|date("d/m/Y") }}">
+                        <td>{{ breakdown.equipment.name }}</td>
+                        <td style="width: 200px;">
+                            <span class=" icon-calendar"></span>
+                            {{ breakdown.created|date("d/m/Y") }}
+                        </td>
+                        <td style="width: 164px">
+                            {% if breakdown.equipment.status == "be" %}
+                                <div class="toggle-link enable">
+                                    En bon état
+                                </div>
+                            {% elseif(breakdown.equipment.status == "me") %}
+                                <div class="toggle-link orange">
+                                    En maintenance
+                                </div>
+                            {% elseif(breakdown.equipment.status == "pe") %}
+                                <div class="toggle-link warning">
+                                    En Panne
+                                </div>
+                            {% else %}
+                                <div class="toggle-link disable">
+                                    A remplacer
+                                </div>
+                            {% endif %}
+                        </td>
+                        {{ tr_action(path('breakdown.show',{id:breakdown.id}),path('breakdown.edit',{id:breakdown.id}), breakdown.maintenance is null ? path('breakdown.destroy',{id:breakdown.id,page:app.request.get('page') ?? 1}):null) | raw }}
+                    </tr>
+            {% endfor %}
+
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Pannes
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'}]) }}
+{% endblock %}

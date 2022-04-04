@@ -1,0 +1,27 @@
+{% from 'admin/component.html.twig' import link,button %}
+<div id="display-view">
+    <div id="display-view-header">
+        {% if up is defined %}
+            <div style="margin-right: 12px">
+                {{ link(up.label,{url:up.url,icon:'icon-plus',className:'accent upper'}) }}
+            </div>
+        {% endif %}
+        {% if edit is defined %}
+            {{ link("Editer",{url:edit,icon:'icon-pencil',className:'warning upper'}) }}
+        {% endif %}
+        {% if delete is defined and delete is not null %}
+            <form disabled="" action="{{ delete.disabled is defined and delete.disabled == true ? delete.url:"" }}"
+                  method="post" class="destroy-form">
+                <input type="hidden" name="_method" value="delete">
+                {{ button("Supprimer",{disabled:delete.disabled ?? false,className:'danger destroy-item',type:'button',name:'_btn',value:'c',icon:'icon-bin'}) }}
+            </form>
+        {% endif %}
+
+    </div>
+    <div>
+        {% block header %} {% endblock %}
+    </div>
+    <div id="display-view-body">
+        {% block body %} {% endblock %}
+    </div>
+</div>

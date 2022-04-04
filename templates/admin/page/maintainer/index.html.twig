@@ -1,0 +1,31 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate %}
+
+{% block content %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Nom','Contact','Date de création'],add:path('maintainer.create'),state:data.state,'info':[data.allCount,"Maintenanciers enrégistrés"]} %}
+        {% block body %}
+            {% for maintainer in data %}
+                    <tr class="kh-t-row"
+                        data-keys="name,date,contact"
+                        data-name="{{ maintainer.name }}"
+                        data-contact="{{ maintainer.contact }}"
+                        data-date="{{ maintainer.created|date("d/m/Y") }}">
+                        <td>{{ maintainer.name }}</td>
+                        <td style="width: 200px;">{{ maintainer.contact }}</td>
+                        <td style="width: 200px;">
+                            <span class=" icon-calendar"></span>
+                            {{ maintainer.created|date("d/m/Y") }}
+                        </td>
+                        {{ tr_action(path('maintainer.show',{id:maintainer.id}),path('maintainer.edit',{id:maintainer.id}),path('maintainer.destroy',{id:maintainer.id,page:app.request.get('page') ?? 1})) | raw }}
+                    </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Maintenanciers
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('maintainer.index'),label:'Maintenanciers'}]) }}
+{% endblock %}

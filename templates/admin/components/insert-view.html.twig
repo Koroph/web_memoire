@@ -1,0 +1,22 @@
+{% from 'admin/component.html.twig' import button %}
+
+<form id="insert-view" method="post" enctype="multipart/form-data">
+    {% if method == 'put' %}
+        <input type="hidden" name="_method" value="PUT"/>
+    {% endif %}
+    <div id="insert-view-header">
+        {% block header %} {% endblock %}
+    </div>
+    <div id="insert-view-body" style="overflow: visible">
+        {% block body %} {% endblock %}
+    </div>
+    <div id="insert-view-btn">
+        {% if method == 'post' %}
+            <div style="margin-right: 14px;">
+                {{ button("Enregistrer et continuer",{type:'submit',name:'_btn',value:'c'}) }}
+            </div>
+        {% endif %}
+        {{ button("Enregistrer",{className:'primary',type:'submit',name:'_btn',value:'n'}) }}
+    </div>
+    <input type="hidden" name="token" value="{{ csrf_token(csrf) }}"/>
+</form>

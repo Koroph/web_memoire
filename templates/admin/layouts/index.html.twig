@@ -1,0 +1,29 @@
+{% extends 'admin/layouts/base.html.twig' %}
+{% from 'views.html' import alert %}
+
+{% block body %}
+    <div id="kh-app" class="{{ app.request.cookies.get('_visual_side_bar_state','') }} ">
+        {% include 'admin/layouts/side-bar.html.twig' %}
+        <div id="kh-app-body">
+            {% include 'admin/layouts/nav-bar.html.twig' %}
+            <div id="kh-app-body-content">
+                {% block navigate %}{% endblock %}
+                <main>
+                    {% block content %}{% endblock %}
+                    <div style="display: none"
+                         id="kh-media-store-base"
+                      {#   data-path_editor_upload_image="#"
+                         data-path_add_folder="{{ path('directory.create') }}"
+                         data-path_folder_delete="{{ path('directory.destroy',{id:'kh'}) }}"
+                         data-path_file_delete="{{ path('files.destroy',{id:'kh'}) }}"
+                         data-path_upload_file="{{ path('files.create') }}"
+                         data-path_find_files="{{ path('files.all') }}"#}></div>
+                </main>
+                {% include 'admin/layouts/message/welcome-message.html.twig' %}
+                {% include 'admin/layouts/message/app-alert.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}{% endblock %}

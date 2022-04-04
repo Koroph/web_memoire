@@ -1,0 +1,99 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,text,dateView,image_profile %}
+
+
+{% block content %}
+    {% set _body %}
+        {% if equipment.image %}
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4">
+                    {% set _url = equipment.image ? equipment.image.url : null %}
+                    {{ image_profile("",{url:_url,width:'200px',fontSize:'2rem'}) }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12 col-md-8">
+                {{ text("Nom",equipment.name) }}
+            </div>
+            <div class="col-12 col-md-4">
+                {{ text("Numéro de serie",equipment.numSerie) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4">
+                {{ text("Marque",equipment.brand) }}
+            </div>
+            <div class="col-12 col-md-4">
+                {{ text("Couleur",equipment.color) }}
+            </div>
+            <div class="col-12 col-md-4">
+                {{ text("Date d'achat",equipment.name) }}
+            </div>
+        </div>
+        {{ dateView(equipment) }}
+
+        {% if equipment.attributions|length > 0 %}
+            <div class="row">
+                {% set _history %}
+                    <table class="table">
+                        <tr>
+                            <th>Date d'attribution</th>
+                            <th>Date fin d'attribution</th>
+                            <th>Titulaire</th>
+                        </tr>
+                        {% for attr in equipment.attributions %}
+                            <tr>
+                                <td> <span class="icon-calendar"></span> {{ attr.start|date("d-m-Y à H:i") }}</td>
+                                <td> <span class="icon-calendar"></span> {{ attr.end|date("d-m-Y à H:i") }}</td>
+                                <td><span class="icon-user"></span> {{ attr.admin.lastname~" "~attr.admin.firstname }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endset %}
+                <div class="col-12">
+                    {{ text("Historique des attributions de ce matériel",_history) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if equipment.breakdowns|length > 0 %}
+            <div class="row">
+                {% set _history %}
+                    <table class="table">
+                        <tr>
+                            <th>Date d'enregistrement</th>
+                            <th>Description de la panne</th>
+                        </tr>
+                        {% for breakdown in equipment.breakdowns %}
+                            <tr>
+                                <td>
+                                    <span class="icon-calendar"></span>
+                                    {{ breakdown.breakdownDate|date("d-m-Y à H:i") }}</td>
+                                <td>
+                                    <a style="color: #2d3747;" href="{{ path("breakdown.show",{id:breakdown.id}) }}">
+                                        {{ breakdown.description }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endset %}
+                <div class="col-12">
+                    {{ text("Historique des pannes de ce matériel",_history) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endset %}
+
+    {% embed "admin/components/display-view.html.twig" with {edit:path('equipment.edit',{id:equipment.id}),delete:{url:path('equipment.destroy',{id:equipment.id})}} %}
+        {% block body %} {{ _body }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Matériel informatique
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('equipment.index'),label:'Matériels informatiques'},{url:path('equipment.show',{id:equipment.id}),label:'Informations'}]) }}
+{% endblock %}

@@ -1,0 +1,20 @@
+<!--
+  ~  @company DarcFlow design [https://darcflow.com]
+  ~  @author    Koroph <yjk@outlook.fr> {(+225)0778329592}
+  ~  @website http://koroph.site
+  ~  @link      https://github.com/Koroph
+  ~  @license   Apache 2.0
+  ~  @Copyright (c) 2021.
+  ~
+  -->
+
+{% from 'views.html' import alert %}
+{% for message in app.flashes(notice_key_danger) %}
+    {{ alert(message,"icon-bin","danger") }}
+{% endfor %}
+{% for message in app.flashes(notice_key_warning) %}
+    {{ alert(message,"icon-warning","warning") }}
+{% endfor %}
+{% for message in app.flashes(notice_key_success) %}
+    {{ alert(message,"icon-info","success") }}
+{% endfor %}

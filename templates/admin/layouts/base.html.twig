@@ -1,0 +1,53 @@
+<!--
+  ~  @company DarcFlow design [https://darcflow.com]
+  ~  @author    Koroph <yjk@outlook.fr> {(+225)0778329592}
+  ~  @website http://koroph.site
+  ~  @link      https://github.com/Koroph
+  ~  @license   Apache 2.0
+  ~  @Copyright (c) 2021.
+  ~
+  -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ app_name }} | {% block title %}{% endblock %}</title>
+    <meta name="theme-color" content="#f19220"/>
+    {% set error = app.flashes("validate_errors") | first %}
+   {% block stylesheets %}
+        {{ encore_entry_link_tags('admin') }}
+    {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('admin') }}
+    {% endblock %}
+</head>
+<body onload="documentLoading();">
+{% set error = app.flashes("validate_errors") | first %}
+{% block body %}{% endblock %}
+{% verbatim %}
+    <script lang="js">
+        function documentLoading() {
+            const previewLoader = document.getElementsByClassName('preview-loading')/*,
+                footerCopyRight = document.getElementById('footer_copy_right'),
+                setTableMask = document.getElementById('setTable-mask'),
+                editorMask = document.getElementById('document-editor-mask')*/;
+
+            if (previewLoader.length) {
+                setTimeout(function () {
+                    /*if (footerCopyRight) {
+                        footerCopyRight.style.display = "flex";
+                    }*/
+                    for (let i = 0; i < previewLoader.length; i++) {
+                        previewLoader.item(i).style.display = "none";
+                    }
+                }, 600);
+            }
+            /*if (editorMask) editorMask.remove();
+            if (setTableMask) setTableMask.remove();*/
+
+        }
+    </script>
+{% endverbatim %}
+</body>
+</html>

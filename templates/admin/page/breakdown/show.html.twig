@@ -1,0 +1,79 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,text,dateView,link %}
+
+
+{% block content %}
+    {% set _body %}
+        <div class="row">
+            <div class="col-12">
+                {{ text("Matériel",breakdown.equipment.name) }}
+            </div>
+            <div class="col-12">
+                {{ text("Date a laquelle la panne est constaté",breakdown.breakdownDate|date("d/m/Y")) }}
+            </div>
+            <div class="col-12">
+                {{ text("Description de la panne",breakdown.description) }}
+            </div>
+        </div>
+        {{ dateView(breakdown) }}
+
+        {% if breakdown.maintenance %}
+            <div class="row">
+                {% set _maintenance %}
+                    <table class="table">
+                        <tr>
+                            <th>Debut de la maintenance</th>
+                            <th>Debut de la maintenance</th>
+                            <th>Maintenancier</th>
+                            <th>Prix de la prestation du maintenancier</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="icon-calendar"></span>
+                                {{ breakdown.maintenance.dateStart|date("d-m-Y à H:i") }}
+                            </td>
+                            <td>
+                                <span class="icon-calendar"></span>
+                                {{ breakdown.maintenance.dateEnd|date("d-m-Y à H:i") }}
+                            </td>
+                            <td>
+                                <span class="icon-calendar"></span>
+                                {{ breakdown.maintenance.maintainer.name }}
+                            </td>
+                            <td>
+                                {{ breakdown.maintenance.price }} FCFA
+                            </td>
+                        </tr>
+                    </table>
+                {% endset %}
+                <div class="col-12">
+                    {{ text("Maintenance effectuée",_maintenance|raw) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% set _action %}
+            <div style="display: flex;">
+                <div>
+                    {{ link("EN BONNE ETAT",{url:path("update.status",{id:breakdown.equipment.id,status:"be"}),className:'success upper'}) }}
+                </div>
+                <div style="margin-left: 8px">
+                    {{ link("A REMPLACER",{url:path("update.status",{id:breakdown.equipment.id,status:"re"}),className:'danger upper'}) }}
+                </div>
+            </div>
+        {% endset %}
+
+        {{ text("Modification du status du materiel",_action|raw) }}
+    {% endset %}
+
+    {% embed "admin/components/display-view.html.twig" with {edit:path('breakdown.edit',{id:breakdown.id}),delete:breakdown.maintenance is null ? {url:path('breakdown.destroy',{id:breakdown.id})}:null} %}
+        {% block body %} {{ _body }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Information
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'},{url:path('breakdown.show',{id:breakdown.id}),label:'Informations'}]) }}
+{% endblock %}

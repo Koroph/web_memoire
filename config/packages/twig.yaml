@@ -1,0 +1,9 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        app_name: '%app.name%'
+        notice_key_danger: 'notice.app.key.danger'
+        notice_key_warning: 'notice.app.key.warning'
+        notice_key_success: 'notice.app.key.success'
+    paths:
+        '%kernel.project_dir%/public/system/logo': logo

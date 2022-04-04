@@ -1,0 +1,53 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,image_profile,text,dateView,group %}
+
+
+{% block content %}
+    {% set _body %}
+        {% set _url = user.image ? user.image.url : null %}
+        {{ image_profile(user.lastname~" "~user.firstname,{url:_url,width:'200px',fontSize:'2rem'}) }}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ text("Nom",user.lastname) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ text("Prénom",user.firstname) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ text("Identifiant de connexion",user.username) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ text("Contact",user.contact) }}
+            </div>
+        </div>
+        {% if is_granted('role_admin') %}
+            <div class="row">
+                <div class="col-12">
+                    {{ text("identifiant de connexion",user.username) }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ text("Fonction",user.workFunction.name ?? "Non defini") }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ text("Service",user.service.name ?? "Non defini") }}
+            </div>
+        </div>
+        {{ dateView(user) }}
+    {% endset %}
+
+    {% embed "admin/components/display-view.html.twig" with {edit:path('user_admin.edit',{ref:user.ref}),delete:{url:path('user_admin.destroy',{ref:user.ref})}} %}
+        {% block body %} {{ _body }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Information sur le compte
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('user_admin.index'),label:'Comptes administrateurs'},{url:path('user_admin.show',{ref:user.ref}),label:'Informations'}]) }}
+{% endblock %}

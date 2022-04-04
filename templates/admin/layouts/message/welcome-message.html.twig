@@ -1,0 +1,17 @@
+<!--
+  ~  @company DarcFlow design [https://darcflow.com]
+  ~  @author    Koroph <yjk@outlook.fr> {(+225)0778329592}
+  ~  @website http://koroph.site
+  ~  @link      https://github.com/Koroph
+  ~  @license   Apache 2.0
+  ~  @Copyright (c) 2021.
+  ~
+  -->
+
+{% for error in app.flashes('login') %}
+    <div id="welcome-message">
+        Content de vous revoir
+        <strong>{{ app.user.firstname }}</strong> !
+        <button id="welcome-message-close" onclick="this.parentElement.remove()">Fermer</button>
+    </div>
+{% endfor %}

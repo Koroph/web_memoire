@@ -1,0 +1,27 @@
+{
+  "entrypoints": {
+    "admin": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_date_to-string_js-node_modules_core-js_modules_es_obj-9d2f59.js",
+        "/build/vendors-node_modules_axios_index_js-node_modules_chart_js_dist_chart_esm_js-node_modules_core-1a39a4.js",
+        "/build/admin.js"
+      ],
+      "css": [
+        "/build/assets_scss_font_style_css.css",
+        "/build/admin.css"
+      ]
+    },
+    "login": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_date_to-string_js-node_modules_core-js_modules_es_obj-9d2f59.js",
+        "/build/login.js"
+      ],
+      "css": [
+        "/build/assets_scss_font_style_css.css",
+        "/build/login.css"
+      ]
+    }
+  }
+}

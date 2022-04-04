@@ -1,0 +1,25 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,input %}
+
+{% block content %}
+    {% set _content %}
+        <div class="row">
+            <div class="col-12">
+                {{ input("Nom","_name",{value:error ? error.name : "",required:true,focus:true}) }}
+            </div>
+            <div class="col-12">
+                {{ input("Contact","_contact",{type:'tel',value:error ? error.contact : "",required:true}) }}
+            </div>
+        </div>
+    {% endset %}
+    {% embed "admin/components/insert-view.html.twig" with {method:'post',csrf:'_user_maintainer_save'} %}
+        {% block body %} {{ _content }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Enrégistrement d'un maintenancier
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('maintainer.index'),label:'Maintenanciers'},{url:path('maintainer.create'),label:'Enrégistrement'}]) }}
+{% endblock %}

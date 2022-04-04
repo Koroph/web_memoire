@@ -1,0 +1,49 @@
+{
+  "version" : "1.2",
+  "profiles" : [ {
+    "id" : "d3fc6c87-faa3-45ac-a2f2-c48ff5b138cc",
+    "name" : "Symfony (PHP, TWIG)",
+    "keyNamingPattern" : "SNAKE_CASE_PATTERN",
+    "sink" : {
+      "id" : "6b5c5cf7-a885-4b07-9d2c-f09e61e8dd89",
+      "type" : "namespaced",
+      "translationsDirectory" : "$PROJECT_DIR$/var/cache/dev/translations",
+      "fileType" : "php",
+      "defaultLocale" : "EiDPGLk",
+      "namespaces" : [ "catalogue.af", "catalogue.ar", "catalogue.az", "catalogue.be", "catalogue.bg", "catalogue.bs", "catalogue.ca", "catalogue.cs", "catalogue.cy", "catalogue.da", "catalogue.de", "catalogue.el", "catalogue.en", "catalogue.es", "catalogue.et", "catalogue.eu", "catalogue.fa", "catalogue.fi", "catalogue.fr", "catalogue.gl", "catalogue.he", "catalogue.hr", "catalogue.hu", "catalogue.hy", "catalogue.id", "catalogue.it", "catalogue.ja", "catalogue.lb", "catalogue.lt", "catalogue.lv", "catalogue.mn", "catalogue.my", "catalogue.nb", "catalogue.nl", "catalogue.nn", "catalogue.no", "catalogue.pl", "catalogue.pt", "catalogue.pt_BR", "catalogue.ro", "catalogue.ru", "catalogue.sk", "catalogue.sl", "catalogue.sq", "catalogue.sr_Cyrl", "catalogue.sr_Latn", "catalogue.sv", "catalogue.th", "catalogue.tl", "catalogue.tr", "catalogue.uk", "catalogue.uz", "catalogue.vi", "catalogue.zh_CN", "catalogue.zh_TW" ],
+      "outputFilenameTemplate" : "%namespace%.%locale%.php",
+      "nestingType" : "DOT",
+      "placeholderFormatterName" : "SYMFONY_REPLACEMENT"
+    },
+    "sources" : [ {
+      "id" : "4f61c006-1f93-49ed-8128-63ce6332fe8a",
+      "type" : "php",
+      "scopeName" : "i18n Ally: Symfony/PHP source",
+      "scopePattern" : "file[web]:src//*&&!file[web]:src/DataFixtures//*",
+      "defaultReplacementTemplate" : "$this->translator->trans('%key%', %map%, '%namespace%')",
+      "recognizedReplacementTemplates" : [ ],
+      "skipDefaultNamespace" : true,
+      "sprintfMode" : false
+    }, {
+      "id" : "ca7479b7-7761-494d-b09e-13673506d44b",
+      "type" : "twig",
+      "scopeName" : "i18n Ally: Symfony/Twig templates",
+      "scopePattern" : "file[web]:templates//*",
+      "defaultReplacementTemplate" : "trans(%map%, '%namespace%')",
+      "attributeReplacementTemplate" : "",
+      "inlineTagsReplacementTemplate" : "trans(%map%, '%namespace%')|raw",
+      "recognizedReplacementTemplates" : [ ],
+      "inlineTagNames" : [ "a", "abbr", "acronym", "b", "bdi", "bdo", "big", "br", "cite", "code", "data", "del", "dfn", "em", "i", "img", "input", "ins", "kbd", "label", "mark", "meter", "output", "progress", "q", "ruby", "s", "samp", "slot", "small", "span", "strong", "sub", "sup", "time", "u", "tt", "var", "wbr" ],
+      "translatableAttributeNames" : [ "title", "alt", "placeholder", "label", "aria-label" ],
+      "skipDefaultNamespace" : true
+    } ]
+  } ],
+  "ignores" : {
+    "valuesInProject" : [ "use strict" ],
+    "valuesInFile" : { },
+    "filesInProject" : [ ],
+    "unignoredFunctionNames" : [ ],
+    "unignoredFunctionArguments" : { },
+    "ignoredArrayKeys" : [ "class", "selector", "template", "middleware", "layout", "el", "component", "type", "name", "id", "key", "sql", "query", "dateFormat", "date", "condition" ]
+  }
+}

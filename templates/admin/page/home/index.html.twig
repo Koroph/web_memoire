@@ -1,0 +1,68 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate,chart_view %}
+
+{% block content %}
+    <div class="row" style="justify-content: center;">
+        <div class="col-12" >
+            {{ chart_view(visitCounterData,{label:'Visites',type:'bar'}) }}
+        </div>
+    </div>
+    {#<div id="home">
+        <div class="home-item">
+            <div class="home-item-content">
+                <div class="home-item-content-svg">
+                    {% include 'svg/user.html.twig' %}
+                </div>
+                <h3>
+                    <strong>{{ admin }}</strong>
+                    Administrateur(s)
+                </h3>
+                <a href="#">
+                    <span></span>
+                    <span>Afficher tous les utilisateurs</span>
+                </a>
+            </div>
+        </div>
+        <div class="home-item">
+            <div class="home-item-content">
+                <div class="home-item-content-svg">
+                    {% include 'svg/team.html.twig' %}
+                </div>
+                <h3>
+                    <strong>{{ customer }}</strong>
+                    Client(s)
+                </h3>
+                <a href="#">
+                    <span></span>
+                    <span>Afficher tous les clients</span>
+                </a>
+            </div>
+        </div>
+        <div class="home-item">
+            <div class="home-item-content">
+                <div class="home-item-content-svg">
+                    {% include 'svg/statistics.html.twig' %}
+                </div>
+                <h3>
+                    <strong>
+                        {{ product }}
+                    </strong>
+                    Produits enrégistré(s)
+                </h3>
+                <a href="#">
+                    <span></span>
+                    <span>
+                        Afficher tous les produits enrégistrés
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>#}
+{% endblock %}
+
+{% block title %}
+    Accueil
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:app.request.uri,label:'Accueil'}]) }}
+{% endblock %}

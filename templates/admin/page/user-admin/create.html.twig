@@ -1,0 +1,92 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,input,radio,checkbox,switchView,media_store,group,select %}
+
+{% block content %}
+    {% set _content %}
+        <div class="row">
+            <div class="col-12">
+                {{ switchView("Status du compte","1","0",{name:'_status',value:true,position:'end'}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ input("Nom","_lastname",{value:error ? error.lastname : "",required:true,focus:true}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ input("Prénom","_firstname",{value:error ? error.firstname : "",required:true}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ input("Identifiant de connexion","_username",{value:error ? error.username : "",required:true}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ input("Contact","_contact",{value:error ? error.contact : "",required:true,type:'tel'}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {% set _options %}
+                    <option></option>
+                    {% for item in  workFunction %}
+                        <option value="{{ item.id }}">
+                            {{ item.name }}
+                        </option>
+                    {% endfor %}
+                {% endset %}
+                {{ select("Fonction","_work_function_id",_options,{id:"service",hint:"Selectionner une fonction..."}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {% set _options %}
+                    <option ></option>
+                    {% for item in  services %}
+                        <option value="{{ item.id }}">
+                            {{ item.name }}
+                        </option>
+                    {% endfor %}
+                {% endset %}
+                {{ select("Service","_service_id",_options,{id:"service",hint:"Selectionner un service..."}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="kh-input-custom">
+                    <div style="margin: 8px 0;">
+                        {{ radio("Administrateur","_role","ROLE_ADMIN",{checked:true}) }}
+                        {{ radio("Utilisateur","_role","ROLE_STAFF") }}
+                    </div>
+                    <label>
+                        Role
+                        <span>**</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ input("Mot de passe **","_password","",{type:'password',required:true}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ input("Confirmez le mot de passe **","confirm_password","",{type:'password',required:true}) }}
+            </div>
+        </div>
+    {% endset %}
+    {% set _image %}
+        <div style="width: 172px;height: 172px;background-color: #e7eced;">
+            {{ media_store("_file",{prefix:'_admin_',icon:'user',imgClass:'_img_header'}) }}
+        </div>
+    {% endset %}
+    {% embed "admin/components/insert-view.html.twig" with {method:'post',csrf:'_user_admin_save'} %}
+        {% block header %}
+            {{ _image }}
+        {% endblock %}
+        {% block body %} {{ _content }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Enrégistrement d'un compte administrateur
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('user_admin.index'),label:'Comptes administrateurs'},{url:path('user_admin.create'),label:'Enrégistrement'}]) }}
+{% endblock %}

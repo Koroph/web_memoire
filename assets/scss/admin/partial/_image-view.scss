@@ -1,0 +1,35 @@
+/*!
+ *  @company DarcFlow design [https://darcflow.com]
+ *  @author    Koroph <yjk@outlook.fr> {(+225)0778329592}
+ *  @website http://koroph.site
+ *  @link      https://github.com/Koroph
+ *  @license   Apache 2.0
+ *  @Copyright (c) 2021.
+ *
+ */
+.kh-img-loader {
+
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $white;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+  }
+
+  input[type="file"] {
+
+  }
+
+  div {
+    svg {
+       transform: scale(3);
+    }
+  }
+}

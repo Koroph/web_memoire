@@ -1,0 +1,22 @@
+
+
+
+// Required
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+
+// Optional
+@import "../../../node_modules/bootstrap/scss/reboot";
+@import "../../../node_modules/bootstrap/scss/tables";
+//@import "~bootstrap/scss/forms";
+//@import "~bootstrap/scss/buttons";
+//@import "~bootstrap/scss/custom-forms";
+/*@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/code";*/
+@import "../../../node_modules/bootstrap/scss/grid";
+//@import "~bootstrap/scss/tables";
+@import "./variable";
+@import "./../font/style.css";
+@import "partial/login";

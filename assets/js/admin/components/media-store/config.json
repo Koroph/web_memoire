@@ -1,0 +1,11 @@
+{
+  "add_folder": "/media/store/directory/create",
+  "remove_folder": "/media/store/directory/destroy/:id",
+  "add_file": "/media/store/files/create",
+  "remove_file": "/media/store/files/destroy/:id",
+  "files": "/media/store/files",
+  "default_size": {
+    "width": 300,
+    "height": 300
+  }
+}

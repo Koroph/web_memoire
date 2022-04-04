@@ -1,0 +1,61 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,input,textarea,select %}
+
+{% block content %}
+    {% set _content %}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {% set _options %}
+                    <option></option>
+                    {% for item in  breakdown %}
+                        {% if item.maintenance is null %}
+                            <option value="{{ item.id }}">
+                                Panne liée à {{ item.equipment.name }}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                {% endset %}
+                {{ select("Pannne **","_breakdown_id",_options,{hint:"Selectionner une panne..."}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {% set _options %}
+                    <option></option>
+                    {% for item in  maintainers %}
+                        <option value="{{ item.id }}">
+                            {{ item.name }}
+                        </option>
+                    {% endfor %}
+                {% endset %}
+                {{ select("Maintenancier **","_maintainer",_options,{hint:"Selectionner un maintenancier..."}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{ input("Prix de la prestation du maintenancier","_price",{type:"number",subLabel:"FCFA",max:10000000,min:100,value:error ? error.name : "",required:true,focus:true}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ input("Debut de la maintenance","_date_start",{type:"date",value:error ? error.name : "",required:true,focus:true}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ input("Debut de la maintenance","_date_end",{type:"date",value:error ? error.name : "",required:true,focus:true}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{ textarea("Detail supplementaire","_description",{value:error ? error.description : ""}) }}
+            </div>
+        </div>
+    {% endset %}
+    {% embed "admin/components/insert-view.html.twig" with {method:'post',csrf:'_user_maintenance_save'} %}
+        {% block body %} {{ _content }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Enrégistrement d'une maintenance
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('maintenance.index'),label:'Maintenances'},{url:path('service.create'),label:'Enrégistrement'}]) }}
+{% endblock %}

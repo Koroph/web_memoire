@@ -1,0 +1,29 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate,state as vState %}
+
+{% block content %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Nom','Date de création'],add:path('work_function.create'),state:data.state,'info':[data.allCount,"Fonctions enrégistrées"]} %}
+        {% block body %}
+            {% for workFunction in data %}
+                    <tr class="kh-t-row"
+                        data-keys="name,date"
+                        data-name="{{ workFunction.name }}"
+                        data-date="{{ workFunction.created|date("d/m/Y") }}">
+                        <td>{{ workFunction.name }}</td>
+                        <td style="width: 200px;">
+                            <span class=" icon-calendar"></span>
+                            {{ workFunction.created|date("d/m/Y") }}
+                        </td>
+                        {{ tr_action(path('work_function.show',{id:workFunction.id}),path('work_function.edit',{id:workFunction.id}),path('work_function.destroy',{id:workFunction.id,page:app.request.get('page') ?? 1})) | raw }}
+                    </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Fonctions
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('work_function.index'),label:'Fonctions'}]) }}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,input %}
+
+{% block content %}
+    {% set _content %}
+        <div class="row">
+            <div class="col-12">
+                {{ input("Nom","_name",{value:error ? error.name : "",required:true,focus:true}) }}
+            </div>
+        </div>
+    {% endset %}
+    {% embed "admin/components/insert-view.html.twig" with {method:'post',csrf:'_user_work_function_save'} %}
+        {% block body %} {{ _content }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Enrégistrement d'une fonction
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('work_function.index'),label:'Fonctions'},{url:path('work_function.create'),label:'Enrégistrement'}]) }}
+{% endblock %}

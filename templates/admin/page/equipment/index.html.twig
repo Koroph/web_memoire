@@ -1,0 +1,47 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate,state as vState %}
+
+{% block content %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Désignation du matériel','Série','Marque','Statut'],add:path('equipment.create'),state:data.state,'info':[data.allCount,"Matériels informatiques enrégistrés"]} %}
+        {% block body %}
+            {% for equipment in data %}
+                <tr class="kh-t-row"
+                    data-keys="name,serie,brand"
+                    data-name="{{ equipment.name }}"
+                    data-serie="{{ equipment.numSerie }}"
+                    data-brand="{{ equipment.brand }}">
+                    <td>{{ equipment.name }}</td>
+                    <td>{{ equipment.numSerie }}</td>
+                    <td>{{ equipment.brand }}</td>
+                    <td style="width: 164px">
+                        {% if equipment.status == "be" %}
+                            <div class="toggle-link enable">
+                                En bon état
+                            </div>
+                        {% elseif(equipment.status == "me") %}
+                            <div class="toggle-link orange">
+                                En maintenance
+                            </div>
+                        {% elseif(equipment.status == "pe") %}
+                            <div class="toggle-link warning">
+                                En Panne
+                            </div>
+                        {% else %}
+                            <div class="toggle-link disable">
+                                A remplacer
+                            </div>
+                        {% endif %}
+                    </td>
+                    {{ tr_action(path('equipment.show',{id:equipment.id}),path('equipment.edit',{id:equipment.id}),path('equipment.destroy',{id:equipment.id,page:app.request.get('page') ?? 1})) | raw }}
+                </tr>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Matériels informatiques
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('equipment.index'),label:'Matériels informatiques'}]) }}
+{% endblock %}

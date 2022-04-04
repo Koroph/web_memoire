@@ -1,0 +1,525 @@
+<!--
+  ~ /**
+  ~  * @author    Koroph <yjk@outlook.fr>
+  ~  *
+  ~  * @website http://koroph.site
+  ~  * @link      https://github.com/Koroph
+  ~  * @license   MIT
+  ~  * @copyright Copyright (c) 2020.
+  ~  */
+  -->
+<!--
+options={other={}}
+-->
+{% macro navigate(links,options) %}
+    {% if links is iterable %}
+        <div class="kh-app-body-content-link-nav-container">
+            {% for link in links %}
+                <a href="{{ link.url }}"
+                   class="kh-app-body-content-link-nav-container-item">
+                    <span>{{ link.label|capitalize }}</span>
+                </a>
+            {% endfor %}
+            {% if options.other is defined %}
+                <div style="flex: 1;"></div>
+                <div class="kh-app-body-content-link-nav-container-other">
+                    <span class="{{ other.icon }}"></span>
+                    <a href="{{ other.url }}">
+                        {{ other.name }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+<!--
+options={id=null,checked=false,required=false}
+-->
+{% macro radio(label,name,value,options) %}
+    <div class="kh-radio">
+        {% set random_id = id() %}
+        <input name="{{ name }}"
+               value="{{ value }}"
+               type="radio"
+               id="{{ options.id ?? random_id }}"
+                {{ options.checked is defined and options.checked == true ? "checked" : "" }}
+                {{ options.required is defined and options.required == true ? "required" : "" }}>
+        <label for="{{ options.id ?? random_id }}">
+            {{ label }}
+        </label>
+    </div>
+{% endmacro %}
+<!--
+options={id=null,checked=false,required=false}
+-->
+{% macro checkbox(label,name,value,options) %}
+    <div class="kh-checkbox">
+        {% set random_id = id() %}
+        <input name="{{ name }}"
+               value="{{ value }}"
+               type="checkbox"
+               id="{{ options.id ?? random_id }}"
+                {{ options.checked is defined and options.checked == true ? "checked" : "" }}
+                {{ options.required is defined and options.required == true ? "required" : "" }}>
+        <label for="{{ options.id ?? random_id }}">
+            {{ label }}
+        </label>
+    </div>
+{% endmacro %}
+<!--
+options={otherRouteName=[],icon="icon-user"}
+-->
+{% macro side_bar_link_item(label,routeName,options) %}
+    <div class="kh-app-side-bar-link-item">
+        <a href="{{ path(routeName~'.index') }}"
+           class="kh-app-side-bar-link-item-a {{ app.request.attributes.get('_route') | link_active(routeName,options.otherRouteName??[]) }}">
+            <div class=" kh-app-side-bar-link-icon">
+                <span class="{{ options.icon ?? 'icon-user' }}"></span>
+            </div>
+            <div class="kh-app-side-bar-link-label">{{ label }}</div>
+        </a>
+    </div>
+{% endmacro %}
+<!--
+options={className="",id=null,icon=null,url}
+-->
+{% macro link(label,options) %}
+    <div class="kh-button-custom {{ options.className ?? '' }}">
+        {% set random_id = id() %}
+        <a id="{{ options.id ?? random_id }}" {% if options.url is defined %} href="{{ options.url }}" {% endif %}>
+            {% if options.icon is defined %}
+                <span class="{{ options.icon }}"></span>
+            {% endif %}
+            {{ label }}
+        </a>
+    </div>
+{% endmacro %}
+<!--
+options={className="",id=null,type="button",name="",value="",icon=null,disabled=false}
+-->
+{% macro button(label,options) %}
+    <div class="kh-button-custom {{ options.className ?? '' }}">
+        {% set random_id = id() %}
+        <button
+                {% if options.value is defined %} value="{{ options.value }}" {% endif %}
+                {% if options.name is defined %} name="{{ options.name }}" {% endif %}
+                id="{{ options.id ?? random_id }}"
+                type="{{ options.type ?? 'button' }}"
+                {{ options.disabled is defined and options.disabled == true  ? "disabled":"" }}>
+            {% if options.icon is defined %}
+                <span class="icon-bin"></span>
+            {% endif %}
+            {{ label }}
+        </button>
+    </div>
+{% endmacro %}
+
+<!--
+options={show,edit,delete}
+-->
+{% macro action(options) %}
+    <td class="kh-action">
+        {% if options.show is defined %}
+            <a href="{{ options.show }}" title="Afficher" class="icon-eye"></a>
+        {% endif %}
+        {% if options.edit is defined %}
+            <a href="{{ options.edit }}" title="Editer" class="icon-pencil"></a>
+        {% endif %}
+        {% if options.delete is defined %}
+            <a href="{{ options.edit }}" title="Supprimer" class="icon-bin"></a>
+        {% endif %}
+    </td>
+{% endmacro %}
+<!--
+options={required=false,value="",focus=false,placeholder="...",type="text",maxLength,id=null,max="",min="",subLabel=null,fileType=null}
+-->
+{% macro input(label,name="",options) %}
+    <div class="kh-input-custom">
+        {% set random_id = id() %}
+        <input
+                placeholder="{{ options.placeholder ?? '...' }}"
+                {% if options.fileType is defined %} accept="{{ options.fileType }}" {% endif %}
+                {% if options.type is defined and options.type== "number" %}
+                    max="{{ options.max }}"
+                    min="{{ options.min }}"
+                {% endif %}
+                class="kh-input-field"
+                name="{{ name ?? '' }}"
+                {% if options.maxLength is defined %} maxlength="{{ options.maxLength }}" {% endif %}
+                {{ options.focus is defined and options.focus == true ? "autofocus":"" }}
+                {{ options.required is defined and options.required == true ? 'required':'' }}
+                {% if options.value is defined %} value="{{ options.value ?? '' }}" {% endif %}
+                type="{{ options.type ?? 'text' }}"
+                id="{{ options.id ?? random_id }}">
+        <label for="{{ options.id ?? random_id }}">
+            {{ label }}
+            {% if options.required is defined and options.required == true %}
+                <span>**</span>
+            {% endif %}
+        </label>
+        {% if options.subLabel is defined %}
+            <span class="sub-label"> {{ options.subLabel }} </span>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+<!--
+options={required=false,placeholder="",rows="4",id=null,value=""}
+-->
+{% macro textarea(label,name="",options) %}
+    <div class="kh-input-custom">
+        {% set random_id = id() %}
+        <textarea
+                onfocus="this.parentElement.classList.add('active');"
+                onblur="this.parentElement.classList.remove('active');"
+                name="{{ name }}"
+                placeholder="{{ options.placeholder ?? '...' }}"
+                {{ options.required is defined and options.required == true ? 'required':'' }}
+                rows="{{ options.rows ?? '4' }}"
+                id="{{ options.id ?? random_id }}">{{ options.value ?? '' | raw }}</textarea>
+        <label for="{{ options.id ?? random_id }}">
+            {{ label }}
+            {% if options.required is defined and options.required == true %}
+                <span>**</span>
+            {% endif %}
+        </label>
+    </div>
+{% endmacro %}
+<!--
+options={required=false,id=""}
+-->
+{% macro _select(label,name="",content="",options) %}
+    {% set random_id = id() %}
+    <div class="kh-input-custom">
+        <select
+                id="{{ options.id ?? random_id }}"
+                {{ options.required is defined and options.required == true ? 'required':'' }}
+                name="{{ name }}">
+            {{ content | raw }}
+        </select>
+        <label for="{{ options.id ?? random_id }}">
+            {{ label }}
+        </label>
+    </div>
+{% endmacro %}
+<!--
+options={searchable=[],required="false",multiple="false",placeholder="...",id=null,init=[]}
+-->
+{% macro chip(label,name="",options) %}
+    <div class="kh-input-custom">
+        {% set random_id = id() %}
+        <div class="kh-native-chip"
+             data-id="{{ options.id ?? random_id }}"
+             data-multiple="{{ options.multiple is defined and options.multiple == true ? 'true':'false' }}"
+             data-required="{{ options.required is defined and options.required == true ? 'true':'false' }}"
+             data-placeholder="{{ options.placeholder ?? '' }}"
+             data-name="{{ name }}"
+             data-searchable="{{ options.searchable ?? [] | json_encode }}"
+             data-init="{{ options.init ?? [] | json_encode }}"
+             data-focus="false"></div>
+        <label for="{{ options.id ?? random_id }}">
+            {{ label }}
+        </label>
+    </div>
+{% endmacro %}
+<!--
+options={color=""}
+-->
+{% macro text(label,text,options) %}
+    <div class="kh-text">
+    <span class="kh-text-label">
+        {{ label | raw }}
+    </span>
+        <div class="kh-text-content {{ options.color ?? '' }}">
+            {{ text | raw }}
+        </div>
+    </div>
+{% endmacro %}
+<!--
+options={url=null,icon="file",width="200px",height="200px"}
+-->
+{% macro image_view(name="",options) %}
+    <div class="kh-img-loader"
+         style="width: {{ options.width ?? '200px' }} ;height: {{ options.height ?? '200px' }} ;padding:{{ options.url is defined  ? " 16px":"2px" }}">
+        <img
+                src="{{ options.url ?? '' }}"
+                alt=""
+                style="display:{{ options.url is defined  ? " none":"block" }}">
+        <input accept="image/*" name="{{ name }}" style="display: none" type="file">
+        <div style="display:{{ options.url is defined  ? " block":"none" }}">
+            {% if options.icon is defined and options.icon == 'file' %}
+                {% include "svg/file.svg" %}
+            {% elseif options.icon is defined and options.icon == 'user' %}
+                {% include "svg/user.svg" %}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+<!--
+  options={label="label",type="pie|line|bar|radar|doughnut|polarArea"}
+  data=[]
+-->
+{% macro chart_view(data=[],options) %}
+    <div class="kh-chart-item">
+        <canvas
+                data-type="{{ options.type ?? 'bar' }}"
+                data-data="{{ data | json_encode }}"
+                data-label="{{ options.label ?? 'Statistique' }}"
+                class="kh-chart-item-content"
+                height="400" width="100%"></canvas>
+        <div
+                class="kh_loading preview-loading">
+            <div class="chat-loading-message">
+                <div>
+                    {% include "svg/statistic.html.twig" %}
+                </div>
+                <strong>
+                    Statistique...
+                </strong>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+<!--
+options={url=null,rounded="",width="64px",fontSize="1.2rem",scale=1}
+-->
+{% macro image_profile(name="",options) %}
+    <div class="image_profile {{ options.rounded ?? '' }}"
+         style="width: {{ options.width ?? '64px' }};height: {{ options.width ?? '64px' }};font-size: {{ options.fontSize ?? '1.2rem' }};transform: scale({{ options.scale ?? '1' }});">
+        {% if options.url is  defined and options.url is not null %}
+            <img
+                    src="{{ options.url }}"
+                    height="{{ options.width ?? '64px' }}"
+                    width="{{ options.width ?? '64px' }}"
+                    alt="{{ name }}"
+                    decoding="async">
+        {% else %}
+            {{ name | word_initial | raw }}
+        {% endif %}
+    </div>
+{% endmacro %}
+<!--
+options={enable="Activé",disabled="Desactivé",classNameEnable="",classNameDisable=""}
+-->
+{% macro state(state=true,options) %}
+    <div class="state-view">
+        {% if state %}
+            <div class="state-view-enable {{ options.classNameEnable ?? '' }}">
+                {{ options.enable ?? 'Activé' }}
+            </div>
+        {% else %}
+            <div class="state-view-disabled {{ options.classNameDisable ?? '' }}">
+                {{ options.disabled ?? 'Desactivé' }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+<!--
+options={icon="icon-info",className="warning",position="topRight"}
+-->
+{% macro alert(message="",options) %}
+    <div class="koroph-alert {{ options.className ?? 'warning' }} {{ position ?? 'topRight' }}">
+        <div class="koroph-alert-icon">
+            <span class="{{ options.icon ?? 'icon-info' }}"></span>
+        </div>
+        <div class="koroph-alert-content">
+            {{ message }}
+        </div>
+        <div class="koroph-alert-content-close">
+            <button>&times;</button>
+        </div>
+    </div>
+{% endmacro %}
+<!--
+options={id=null,hint="",required=false,disabled=false,multiple=false,search=true}
+-->
+{% macro select(label="",name="",content="",options) %}
+    <div class="koroph-input-customize small default select kh-select-id">
+        {% set random_id = id() %}
+        <label for="{{ options.id ?? random_id }}">
+            {{ label }}
+            {% if options.required is defined and options.required == true %}
+                <span style="color: #019201;">**</span>
+            {% endif %}
+        </label>
+        <select
+
+                data-search="{{ options.search is defined and options.search == true ? "true":"false" }}"
+                data-placeholder="{{ options.hint ?? '' }}"
+                class="kh-select-native"
+                id="{{ options.id ?? random_id }}"
+                name="{{ name }}"
+        {{ options.multiple is defined and options.multiple == true ? 'multiple':'' }}
+        {{ options.required is defined and options.required == true ? 'required':'' }}
+        {{ options.disabled is defined and options.disabled == true ? 'disabled':'' }}
+        {{ content | raw }}
+        </select>
+        <!-- <span class="icon-ctrl"></span>-->
+    </div>
+{% endmacro %}
+<!--
+options={value,url=null,icon='file',id=null,inputId=null,imgClass=null,required=false,reload=false,prefix="_img_",className=null,width='0',height='0'}
+-->
+{% macro media_store(name,options) %}
+    {% set base_id = id() %}
+    {% set input_id = id() %}
+    {% set imag_class = id() %}
+    <div class="{{ options.className ?? 'img-media-store' }}"
+         id="{{ options.id ?? base_id }}"
+         data-img_class="{{ options.imgClass ?? imag_class }}"
+         data-reload="{{ options.reload is defined and options.reload ==  true ? 'true' : 'false' }}"
+         data-input_id="{{ options.inputId ?? input_id }}"
+         data-width="{{ options.width ?? '0' }}"
+         data-height="{{ options.height ?? '0' }}"
+         data-prefix="{{ options.prefix ?? '' }}">
+        <img
+                class="{{ options.imgClass ?? imag_class }}"
+                src="{{ options.url ?? '' }}"
+                alt=""
+                style="display:{{ options.url is not defined or options.url is null  ? 'none':'block' }}">
+        <input
+                style="display: none;"
+                type="text"
+                id="{{ options.inputId ?? input_id }}"
+                {{ options.required is defined and options.required == true ? 'required':'' }}
+                name="{{ name ?? '' }}"
+                value="{{ options.value ?? '' }}">
+        <div class="media-store-icon"
+             style="display:{{ options.url is not defined or options.url is null ? 'block':'none' }}">
+            {% if options.icon is defined %}
+                {% if options.icon == 'file' %}
+                    {% include "svg/file.svg" %}
+                {% elseif options.icon == 'user' %}
+                    {% include "svg/user.svg" %}
+                {% elseif options.icon == 'add' %}
+                    {% include "svg/file.svg" %}
+                {% elseif options.icon == 'folder' %}
+                    {% include "svg/folder.svg" %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+<!--
+options={}
+-->
+{% macro dateView(entity) %}
+    <div class="row">
+        <div class="col-12 col-md-6">
+            {{ _self.text("Date de création","<span class='icon-calendar'></span>"~entity.created|date('d/m/Y') ~ " à "~entity.created|date('H:i')) }}
+        </div>
+        <div class="col-12 col-md-6">
+            {{ _self.text("Date de la derniére mise à jour","<span class='icon-calendar'></span>"~entity.updated|date('d/m/Y') ~ " à
+        "~entity.updated|date('H:i'),{color:"warning"}) }}
+        </div>
+    </div>
+{% endmacro %}
+<!--
+options={color="primary",open=true,badge=null,icon=null}
+-->
+{% macro panel(title,content,options) %}
+    <div class="koroph-panel">
+        <header class="{{ options.color ?? 'primary' }}">
+            {% if options.badge is defined %}
+                <div class="koroph-panel-badge">
+            <span>
+                {{ options.badge }}
+            </span>
+                </div>
+            {% endif %}
+            <div class="koroph-panel-text">
+                {% if options.icon is defined %}
+                    <span class="{{ options.icon }}"></span>
+                {% endif %}
+                {{ title }}
+            </div>
+            <div class="koroph-panel-indicator">
+                <button
+                        type="button"
+                        class="icon-ctrl ripper koroph-panel-indicator-button {{ (options.open is defined and options.open == true) ? 'panel-show':'' }}">
+                </button>
+            </div>
+        </header>
+        <div class="koroph-panel-content {{ (options.open is defined and options.open == true) ? 'open':'close' }}">
+            {{ content | raw }}
+        </div>
+    </div>
+{% endmacro %}
+<!--
+options={name,value=false,position="end",id=null}
+-->
+{% macro switchView(label,on,off,options) %}
+    {% set base_id = id() %}
+    <div class="kh-switch">
+        {% if options.position is defined and  options.position == 'start' %}
+            <span class="kh-switch-lbl">{{ label }}</span>
+        {% endif %}
+        <input
+                data-on="{{ on }}"
+                data-off="{{ off }}"
+                type="checkbox"
+                id="{{ options.id ?? base_id }}"
+                value="{{ options.value ? on : off }}"
+                {% if options.name %} name="{{ options.name }}" {% endif %}
+                {{ (options.value is defined and options.value == true) ? "checked":"" }}
+                class="kh-switch-input kh-switch-field">
+        <label
+                for="{{ options.id ?? base_id }}"
+                class="kh-switch-label"></label>
+        {% if options.position is defined and  options.position == 'end' %}
+            <span class="kh-switch-lbl">
+            {{ label }}
+        </span>
+        {% endif %}
+    </div>
+{% endmacro %}
+<!--
+options={disabled,checked,value={label,value,disabled,checked}}
+-->
+{% macro group(label,name,options) %}
+    {% set base_id = id() %}
+    <div class="kh-group">
+        <div class="kh-checkbox">
+            <input
+                    id="_{{ base_id }}"
+                    {{ (options.disabled is defined and options.disabled) ? "disabled":"" }}
+                    data-target="_{{ base_id }}"
+                    value="true"
+                    type="checkbox">
+            <label for="_{{ base_id }}">
+                <strong>
+                    {{ label }}
+                </strong>
+            </label>
+        </div>
+        <div style="margin-left: 24px;">
+            {% if options.value is defined %}
+                {% for item in options.value.value %}
+                    {% set _id = id() %}
+                    <div>
+                        <div class="kh-checkbox">
+                            <input
+                                    {{ (item.disabled is defined and item.disabled) ? "disabled":"" }}
+                                    {{  (item.checked is defined and item.checked) ? "checked":"" }}
+                                    class="_{{ base_id }}"
+                                    name="_{{ name }}[]"
+                                    id="_{{ _id }}_"
+                                    value="{{ item.value ?? "" }}"
+                                    type="checkbox">
+                            <label for="_{{ _id }}_">
+                                {{ item.label ?? "" }}
+                            </label>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {#
+            <input
+                    type="hidden"
+                    name="_role[]"
+                    value=""> #}
+        </div>
+
+    </div>
+{% endmacro %}

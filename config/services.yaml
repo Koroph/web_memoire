@@ -1,0 +1,49 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    app.admin_dir:
+        - { name: admin, path: 'storage/admin/image' }
+    app.public_dir:
+        - { name: public, path: '%kernel.project_dir%/public' }
+    app.storage_dir:
+        - { name: storage, path: '%kernel.project_dir%/public/storage/' }
+    app.name: '%env(resolve:APP_NAME)%'
+    app.url: '%env(resolve:APP_URL)%'
+    app.image_resize_size:
+        - { width: '%env(resolve:IMAGE_RESIZE_WIDTH)%' , height: '%env(resolve:IMAGE_RESIZE_HEIGHT)%' }
+    app.paginate_count: 20
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+            - '../src/Utils/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\Admin\:
+        resource: '../src/Controller/Admin/*'
+        tags: [ 'controller.service_arguments' ]
+    App\Controller\MediaStore\:
+        resource: '../src/Controller/MediaStore/*'
+        tags: [ 'controller.service_arguments' ]
+    # App\Controller\Api\:
+    #  resource: '../src/Controller/Api/*'
+    #  tags: [ 'controller.service_arguments' ]
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

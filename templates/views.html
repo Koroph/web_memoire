@@ -1,0 +1,440 @@
+<!--
+  ~ /**
+  ~  * @author    Koroph <yjk@outlook.fr>
+  ~  *
+  ~  * @website http://koroph.site
+  ~  * @link      https://github.com/Koroph
+  ~  * @license   MIT
+  ~  * @copyright Copyright (c) 2020.
+  ~  */
+  -->
+{% macro navigate(links,other) %}
+{% if links is iterable %}
+<div class="kh-app-body-content-link-nav-container">
+    {% for link in links %}
+    <a href="{{ link.url }}"
+       class="kh-app-body-content-link-nav-container-item">
+        <span>{{ link.label|capitalize }}</span>
+    </a>
+    {% endfor %}
+    {% if other is not null %}
+    <div style="flex: 1;"></div>
+    <div class="kh-app-body-content-link-nav-container-other">
+        <span class="{{ other.icon }}"></span>
+        <a href="{{ other.url }}">
+            {{ other.name }}
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro radio(label,name,value="",id=null,isChecked=false,isRequired=false) %}
+<div class="kh-radio">
+    {% set random_id = id() %}
+    <input name="{{ name }}"
+           value="{{ value }}"
+           type="radio"
+           id="{{ id ?? random_id }}"
+           {{ isChecked ? "checked" : "" }}
+    {{ isRequired ? "required" : "" }}>
+    <label for="{{ id ?? random_id }}">
+        {{ label }}
+    </label>
+</div>
+{% endmacro %}
+
+
+{% macro checkbox(label,name,value="",id=null,isChecked=false,isRequired=false) %}
+<div class="kh-checkbox">
+    {% set random_id = id() %}
+    <input name="{{ name }}"
+           value="{{ value }}"
+           type="checkbox"
+           id="{{ id ?? random_id }}"
+           {{ isChecked ? "checked" : "" }}
+    {{ isRequired ? "required" : "" }}>
+    <label for="{{ id ?? random_id }}">
+        {{ label }}
+    </label>
+</div>
+{% endmacro %}
+
+
+{% macro side_bar_link_item(label,routeName,icon="icon-user",otherRouteName=[],enabled=true) %}
+<div class="kh-app-side-bar-link-item">
+    {% if enabled %}
+    <a href="{{ path(routeName~'.index') }}"
+       class="kh-app-side-bar-link-item-a {{  app.request.attributes.get('_route') | link_active(routeName,otherRouteName) }}">
+        <span class="{{ icon}} kh-app-side-bar-link-icon"></span>
+        <span class="kh-app-side-bar-link-label">{{ label }}</span>
+    </a>
+    {% else %}
+    <a class="kh-app-side-bar-link-item-del" title="Réabonnez-vous">
+        <span class="{{ icon}} kh-app-side-bar-link-icon"></span>
+        <span class="kh-app-side-bar-link-label">{{ label }}</span>
+    </a>
+    {% endif %}
+</div>
+{% endmacro %}
+{% macro link(label,url="#",className="",id=null,icon=null,download=null,target=null) %}
+<div class="kh-button-custom {{ className }}">
+    {% set random_id=id() %}
+    <a id="{{ id ?? random_id }}" href="{{ url }}" {% if download is not null %} download="{{ download }}" {% endif %}>
+        {% if icon!=null %}
+        <span class="{{ icon }}"></span>
+        {% endif %}
+        {{ label }}
+    </a>
+</div>
+{% endmacro %}
+
+{% macro button(label,className="",id=null,type="button",name="",value="",icon=null,disabled=false) %}
+<div class="kh-button-custom {{ className }}">
+    {% set random_id=id() %}
+    <button
+            value="{{ value }}"
+            name="{{ name }}"
+            id="{{ id ?? random_id }}"
+            type="{{ type }}"
+            {{ disabled ?
+    "disabled":"" }}>
+    {% if icon is not null %}
+    <span class="icon-bin"></span>
+    {% endif %}
+    {{ label }}
+    </button>
+</div>
+{% endmacro %}
+
+
+{% macro action(show,edit,delete) %}
+<td class="kh-action">
+    {% if show is defined %}
+    <a href="#" title="Afficher" class="icon-eye"></a>
+    {% endif %}
+    {% if show is defined %}
+    <a href="#" title="Editer" class="icon-pencil"></a>
+    {% endif %}
+    {% if show is defined %}
+    <a href="#" title="Supprimer" class="icon-bin"></a>
+    {% endif %}
+</td>
+{% endmacro %}
+
+
+{% macro input(label,name="",value="",required=false,focus=false,placeholder="...",type="text",id=null,max="",min="",subLabel=null,fileType=null) %}
+<div class="kh-input-custom">
+    {% set random_id=id() %}
+    <input
+            onfocus="this.parentElement.classList.add('active')"
+            onblur="this.parentElement.classList.remove('active')"
+            placeholder="{{ placeholder }}"
+            {% if fileType is not null %} accept="{{ fileType }}" {% endif %}
+            {% if type== "number" %}
+    max="{{ max }}"
+    min="{{ min }}"
+    {% endif %}
+    name="{{ name }}"
+    maxlength="255"
+    {{ focus ? "autofocus":"" }}
+    {{ required ? 'required':'' }}
+    value="{{ value }}"
+    type="{{ type }}"
+    id="{{ id ?? random_id }}">
+    <label for="{{ id ?? random_id }}">
+        {{ label }}
+        {% if required %}
+        <span>**</span>
+        {% endif %}
+    </label>
+    {% if subLabel is not null %}
+    <span class="sub-label">
+        {{ subLabel }}
+    </span>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro textarea(label,name="",value="",required=false,placeholder="",rows="4",id=null) %}
+<div class="kh-input-custom">
+    {% set random_id=id() %}
+    <textarea
+            onfocus="this.parentElement.classList.add('active');"
+            onblur="this.parentElement.classList.remove('active');"
+            name="{{ name }}"
+            placeholder="{{ placeholder }}"
+            {{ required ? 'required':'' }}
+    rows="{{ rows }}"
+    id="{{ id ?? random_id }}">{{ value ?? '' | raw }}</textarea>
+    <label for="{{ id ?? random_id }}">
+        {{ label }}
+        {% if required %}
+        <span>**</span>
+        {% endif %}
+    </label>
+</div>
+{% endmacro %}
+
+{% macro select(label,name="",options="",required=false,id="") %}
+<div class="kh-input-custom">
+    <select
+            id="{{ id }}"
+            {{ required ? 'required':'' }}
+    name="{{ name }}" >
+    {{ options | raw }}
+    </select>
+    <label for="{{ id }}">
+        {{ label}}
+    </label>
+</div>
+{% endmacro %}
+{% macro chip(label,name="",searchable=[],required="false",multiple="false",placeholder="...",id=null,init=[]) %}
+<div class="kh-input-custom">
+    {% set random_id=id() %}
+    <div class="kh-native-chip"
+         data-id="{{ id ?? random_id }}"
+         data-multiple="{{ multiple }}"
+         data-required="{{ required }}"
+         data-placeholder="{{ placeholder }}"
+         data-name="{{ name }}"
+         data-searchable="{{ searchable | json_encode }}"
+         data-init="{{ init | json_encode }}"
+         data-focus="false"></div>
+    <label for="{{ id ?? random_id }}">
+        {{ label}}
+    </label>
+</div>
+{% endmacro %}
+{% macro text(label,text,color="") %}
+<div class="kh-text">
+    <span class="kh-text-label">
+        {{ label | raw }}
+    </span>
+    <div class="kh-text-content {{ color }}">
+        {{ text | raw }}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro image_view(name="",url=null,icon="file",width="200px",height="200px") %}
+<div class="kh-img-loader" style="width: {{ width }} ;height: {{ height }} ;padding:{{ url is null  ? " 16px":"2px" }}">
+<img src="{{ url }}" alt="" style="display:{{ url is null  ? " none":"block" }}">
+<input accept="image/*" name="{{ name }}" style="display: none" type="file">
+<div style="display:{{ url is null  ? " block":"none" }}">
+<svg style="display:{{ icon=='file' ? " block":"none" }}"
+version="1.1" xmlns="http://www.w3.org/2000/svg" width="32"
+height="32" viewBox="0 0 32 32">
+<title>file-picture</title>
+<path d="M26 28h-20v-4l6-10 8.219 10 5.781-4v8z"></path>
+<path d="M26 15c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3c1.657 0 3 1.343 3 3z"></path>
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+</svg>
+<svg style="display:{{ icon=='user' ? " block":"none" }}"
+version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+viewBox="0 0 32 32">
+<title>user-plus</title>
+<path d="M12 23c0-4.726 2.996-8.765 7.189-10.319 0.509-1.142 0.811-2.411 0.811-3.681 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h12.416c-0.271-0.954-0.416-1.96-0.416-3z"></path>
+<path d="M23 14c-4.971 0-9 4.029-9 9s4.029 9 9 9c4.971 0 9-4.029 9-9s-4.029-9-9-9zM28 24h-4v4h-2v-4h-4v-2h4v-4h2v4h4v2z"></path>
+</svg>
+</div>
+</div>
+{% endmacro %}
+
+<!--
+  options={label="label",type="pie|line|bar"}
+  data=[]
+-->
+{% macro chart_view(data=[],options) %}
+<div class="kh-chart-item">
+    <canvas
+            data-type="{{ options.type ?? 'bar' }}"
+            data-data="{{ data | json_encode }}"
+            data-label="{{ options.label ?? 'label' }}"
+            class="kh-chart-item-content"
+            style="width: 100%;height: 350px;"></canvas>
+    <div
+            class="kh_loading preview-loading">
+        <div class="chat-loading-message">
+            <div>
+                {% include "svg/statistic.html.twig" %}
+            </div>
+            <strong>
+                Statistique...
+            </strong>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro image_profile(name="",url=null,rounded="",width="64px",fontSize="1.2rem",scale=1) %}
+<div class="image_profile {{ rounded }}"
+     style="width: {{ width }};height: {{ width }};font-size: {{ fontSize }};transform: scale({{ scale }});">
+    {% if url %}
+    <img
+            src="{{ url }}"
+            height="{{ width }}"
+            width="{{ width }}"
+            alt="{{ name }}"
+            decoding="async">
+    {% else %}
+    {{ name | word_initial | raw }}
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro state(state=true,enable="Activé",disabled="Desactivé",classNameEnable="",classNameDisable="") %}
+<div class="state-view">
+    {% if state %}
+    <div class="state-view-enable {{ classNameEnable }}">
+        {{ enable }}
+    </div>
+    {% else %}
+    <div class="state-view-disabled {{ classNameDisable }}">
+        {{ disabled }}
+    </div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro alert(message="",icon="icon-info",className="warning",position="topRight") %}
+<div class="koroph-alert {{ className }} {{ position }}">
+    <div class="koroph-alert-icon">
+        <span class="{{ icon }}"></span>
+    </div>
+    <div class="koroph-alert-content">
+        {{ message }}
+    </div>
+    <div class="koroph-alert-content-close">
+        <button>&times;</button>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro khSelect(content,label,name="",id=null,hint="",required=false,disabled=false,multiple=false,search=true) %}
+<div class="koroph-input-customize small default select kh-select-id">
+    {% set random_id=id() %}
+    <label for="{{ id ?? random_id }}">
+        {{ label }}
+        <span style="color: #019201;display: {{ required ? 'inline-block':'none' }}">**</span>
+    </label>
+    <select
+            {{ disabled ? "disabled":"" }}
+    data-search="{{ search ? "true":"false" }}"
+    data-placeholder="{{ hint }}"
+    class="kh-select-native"
+    {{ required ? "required":"" }}
+    id="{{ id ?? random_id }}"
+    name="{{ name }}"
+    {{ multiple ? "multiple":"" }}>
+    {{ content | raw }}
+    </select>
+    <!-- <span class="icon-ctrl"></span>-->
+</div>
+{% endmacro %}
+
+{% macro media_store(name,value,url=null,icon='file',id=null,inputId=null,imgClass=null,required=false,reload=false,prefix="_img_",className=null,width='0',height='0') %}
+{% set base_id = id() %}
+{% set input_id = id() %}
+{% set imag_class = id() %}
+<div class="{{ className ?? 'img-media-store' }}"
+     id="{{ id ?? base_id }}"
+     data-img_class="{{ imgClass ?? imag_class }}"
+     data-reload="{{ reload ? 'true' : 'false' }}"
+     data-input_id="{{ inputId ?? input_id }}"
+     data-width="{{ width }}"
+     data-height="{{ height }}"
+     data-prefix="{{ prefix }}">
+    <img
+            class="{{ imgClass ?? imag_class }}"
+            src="{{ url }}"
+            alt="koroph"
+            style="display:{{ url == null ? 'none':'block' }}">
+    <input
+            style="display: none;"
+            type="text"
+            id="{{ inputId ?? input_id }}"
+            {{ required ? "required":"" }}
+    name="{{ name }}"
+    value="{{ value }}">
+    <div class="media-store-icon" style="display:{{ url == null ? 'block':'none' }}">
+        {% if icon=='file' %}
+        {% include "svg/file.svg" %}
+        {% elseif icon=='user' %}
+        {% include "svg/user.svg" %}
+        {% elseif icon=='add' %}
+        {% include "svg/file.svg" %}
+        {% elseif icon=='folder' %}
+        {% include "svg/folder.svg" %}
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro dateView(entity) %}
+<div class="row">
+    <div class="col-12 col-md-6">
+        {{ _self.text("Date de création",entity.created|date('d/m/Y') ~ " à "~entity.created|date('H:i')) }}
+    </div>
+    <div class="col-12 col-md-6">
+        {{ _self.text("Date de la derniére mise à jour",entity.updated|date('d/m/Y') ~ " à
+        "~entity.updated|date('H:i'),"warning") }}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro panel(title,content,color="primary",isOpen=true,badge=null,icon=null) %}
+<div class="koroph-panel">
+    <header class="{{ color }}">
+        {% if badge is not null %}
+        <div class="koroph-panel-badge">
+            <span>
+                {{ badge }}
+            </span>
+        </div>
+        {% endif %}
+        <div class="koroph-panel-text">
+            {% if icon is not null %}
+            <span class="{{ icon }}"></span>
+            {% endif %}
+            {{ title }}
+        </div>
+        <div class="koroph-panel-indicator">
+            <button
+                    type="button"
+                    class="icon-ctrl ripper koroph-panel-indicator-button {{ isOpen ? 'panel-show':'' }}">
+            </button>
+        </div>
+    </header>
+    <div class="koroph-panel-content {{ isOpen ? 'open':'close' }}">
+        {{ content | raw }}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro switchView(on,off,label,name,value=false,position="end",id=null) %}
+{% set base_id = id() %}
+<div class="kh-switch">
+    {% if position == 'start' %}
+    <span class="kh-switch-lbl">{{  label }}</span>
+    {% endif %}
+    <input
+            data-on="{{ on }}"
+            data-off="{{ off }}"
+            type="checkbox"
+            id="{{ id ?? base_id }}"
+            value="{{ value ? on : off }}"
+            name="{{ name }}"
+            {{ value ? "checked":"" }}
+    class="kh-switch-input kh-switch-field">
+    <label
+            for="{{ id ?? base_id }}"
+            class="kh-switch-label"></label>
+    {% if position == 'end' %}
+    <span class="kh-switch-lbl">
+            {{  label }}
+        </span>
+    {% endif %}
+</div>
+{% endmacro %}

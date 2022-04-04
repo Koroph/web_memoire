@@ -1,0 +1,91 @@
+<!--
+  ~  @company DarcFlow design [https://darcflow.com]
+  ~  @author    Koroph <yjk@outlook.fr> {(+225)0778329592}
+  ~  @website http://koroph.site
+  ~  @link      https://github.com/Koroph
+  ~  @license   Apache 2.0
+  ~  @Copyright (c) 2021.
+  ~
+  -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ app_name }} | Connexion</title>
+    {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('login') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('login') }}
+    {% endblock %}
+
+    {# <link rel="icon" type="image/x-icon" href="{{ asset('storage/system/logo/logo.png') }}"> #}
+    <meta name="theme-color" content="#fd7400"/>
+</head>
+<body>
+<div id="login">
+    <div class="login-item-view">
+        <div id="login-item-view-about">
+            <h3>{{ app_name }}</h3>
+            <p>
+                Panneau d'administration de la restauration de l'INPHB
+            </p>
+        </div>
+    </div>
+    <div class="login-item-view">
+        <form id="login-item-view-form" method="post">
+            <h3>Authentification</h3>
+            <div class="login-item-view-form-content">
+                <div class="login-item-view-form-item">
+                    <label for="username" class="active">
+                        Identifiant de connexion
+                    </label>
+                    <input
+                            type="text"
+                            value="{{ last_username ?? '' }}"
+                            name="username"
+                            id="username"
+                            class="kh-input-field"
+                            required
+                            autocomplete="false"
+                            autofocus>
+                </div>
+                <div class="login-item-view-form-item">
+                    <label for="password">
+                        Mot de passe
+                    </label>
+                    <input
+                            class="kh-input-field"
+                            type="password"
+                            name="password"
+                            id="password"
+                            required
+                            autofocus>
+                    <button
+                            id="password-blocked"
+                            class="icon-eye-blocked"
+                            type="button"></button>
+                </div>
+
+            </div>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}">
+            <div id="login-item-view-form-btn">
+                <button type="submit">
+                    Connexion
+                </button>
+            </div>
+        </form>
+        {% if error %}
+        <div id="login-item-view-error">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

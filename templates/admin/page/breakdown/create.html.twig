@@ -1,0 +1,38 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,input,textarea,select %}
+
+{% block content %}
+    {% set _content %}
+        <div class="row">
+            <div class="col-12">
+                {% set _options %}
+                    <option></option>
+                    {% for item in  equipments %}
+                        {% if item.attributions|length > 0 %}
+                            <option value="{{ item.id }}">
+                                {{ item.name }} -> {{ item.attributions|last.admin.lastname }} {{ item.attributions|last.admin.firstname }}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                {% endset %}
+                {{ select("Matériel","_equipment_id",_options,{hint:"Selectionner un matériel..."}) }}
+            </div>
+            <div class="col-12">
+                {{ input("Date a laquelle la panne est constaté","_breakdown_date",{type:'date',value:error ? error.breakdownDate : "",required:true,focus:true}) }}
+            </div>
+            <div class="col-12">
+                {{ textarea("Description de la panne","_description",{value:error ? error.description : "",required:true,focus:true}) }}
+            </div>
+        </div>
+    {% endset %}
+    {% embed "admin/components/insert-view.html.twig" with {method:'post',csrf:'_user_breakdown_save'} %}
+        {% block body %} {{ _content }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Enregistrement d'une panne
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'},{url:path('breakdown.create'),label:'Enrégistrement'}]) }}
+{% endblock %}

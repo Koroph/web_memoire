@@ -1,0 +1,25 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,text,dateView %}
+
+
+{% block content %}
+    {% set _body %}
+        <div class="row">
+            <div class="col-12">
+                {{ text("Nom",service.name) }}
+            </div>
+        </div>
+        {{ dateView(service) }}
+    {% endset %}
+
+    {% embed "admin/components/display-view.html.twig" with {edit:path('work_function.edit',{id:service.id}),delete:{url:path('work_function.destroy',{id:service.id})}} %}
+        {% block body %} {{ _body }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Information
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('service.index'),label:'Services'},{url:path('service.show',{id:service.id}),label:'Informations'}]) }}
+{% endblock %}

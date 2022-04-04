@@ -1,0 +1,48 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate,state as vState %}
+
+{% block content %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['','Nom','Prénom','Contact','Status'],add:path('user_admin.create'),state:data.state,'info':[data.allCount,"Comptes administrateurs enrégistrés"]} %}
+        {% block body %}
+            {% for user in data %}
+                {% if user.id != app.user.id or 'ROLE_SUPER_ADMIN' not in user.roles %}
+                    <tr class="kh-t-row"
+                        data-keys="firstname,lastname,contact,status"
+                        data-status="{{ user.isActivated ? "actif":"inactif" }}"
+                        data-contact="{{ user.contact }}"
+                        data-firstname="{{ user.firstname }}"
+                        data-lastname="{{ user.lastname }}">
+                        <td style="width: 72px;">
+                            {% set _url= user.image ? user.image.url : null %}
+                            {{ image_profile(user.firstname~" "~user.lastname,_url,"rounded","28px","0.7rem","1.3") | raw }}
+                        </td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td style="width:116px;">{{ user.contact }}</td>
+                        <td style="width: 96px;">
+                            {% if user.isActivated %}
+                                <a href="{{ path('user_admin.activated',{ref:user.ref}) }}" class="toggle-link enable">
+                                   <span class="icon-unlocked"></span>
+                                    Actif
+                                </a>
+                            {% else %}
+                                <a href="{{ path('user_admin.activated',{ref:user.ref}) }}" class="toggle-link disable">
+                                    <span class="icon-lock"></span>
+                                    Inactif
+                                </a>
+                            {% endif %}
+                        </td>
+                        {{ tr_action(path('user_admin.show',{ref:user.ref}),path('user_admin.edit',{ref:user.ref}),path('user_admin.destroy',{ref:user.ref,page:app.request.get('page') ?? 1})) | raw }}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Comptes administrateurs
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('user_admin.index'),label:'Comptes administrateurs'}]) }}
+{% endblock %}

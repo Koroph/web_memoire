@@ -1,0 +1,183 @@
+{% from 'views.html' import link %}
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'views.html' import navigate,state as vState,input,button,textarea,text,media_store,khSelect %}
+
+{% block content %}
+    <div id="index-view">
+        <div id="index-view-body">
+            <div class="tab">
+                <div class="tab-bar">
+                    <button data-target="tab-1" class="tab-bar-item">
+                        <span class="icon-bookmarks"></span>
+                        <span>Site web</span>
+                    </button>
+                    <button data-target="tab-2" class="tab-bar-item">
+                        <span class="icon-ticket"></span>
+                        <span>Banniére</span>
+                    </button>
+                    <button data-target="tab-3" class="tab-bar-item">
+                        <span class="icon-link"></span>
+                        <span>Réseaux sociaux</span>
+                    </button>
+                    <button data-target="tab-4" class="tab-bar-item">
+                        <span class="icon-address-book"></span>
+                        <span>Contact</span>
+                    </button>
+
+                    <button data-target="tab-5" class="tab-bar-item">
+                        <span class="icon-location"></span>
+                        <span>Livraison</span>
+                    </button>
+                </div>
+                <div class="tab-content">
+                    <form method="post" class="tab-content-item" id="tab-1">
+                        <div class="tab-content-item-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ textarea("Description de votre activité","_dp_activity",setting['_dp_activity'].value ?? '') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ input("Heures D'ouverture","_open",setting['_open'].value ?? '') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content-item-footer">
+                            {{ button("Enrégistrer","primary",null,"submit") }}
+                        </div>
+                        <input type="hidden" name="_method" value="PUT"/>
+                    </form>
+                    <form method="post" class="tab-content-item" id="tab-2">
+                        <div class="tab-content-item-body">
+                            <div class="row" style="align-items: center;">
+                                <div class="col-12 col-md-6">
+                                    {% set content %}
+                                        <div style="width: 100%;height: 280px;">
+                                            {{ media_store("file_id",setting['file_id'].file.id ?? "",setting['file_id'].file.url??"","file",null,null,null,false,false,'_banner_','img-media-store',1080,400) }}
+                                        </div>
+                                    {% endset %}
+                                    {{ text("Image",content) }}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    {% set content %}
+                                        <option></option>
+                                        {% for category in categories %}
+                                            {% if category.products|length > 0 %}
+                                                <option
+                                                        {{ setting['file_id'] is defined ? (setting['file_id'].value == category.id ? "selected" : "" ) : "" }}
+                                                        value="{{ category.id }}">
+                                                    {{ category.name }}
+                                                </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endset %}
+                                    {{ khSelect(content,"Lien associé","_category",null,"Selectionner une catégorie",true) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content-item-footer">
+                            {{ button("Enrégistrer","primary",null,"submit") }}
+                        </div>
+                        <input type="hidden" name="_method" value="PUT"/>
+                    </form>
+                    <form method="post" class="tab-content-item" id="tab-3">
+                        <div class="tab-content-item-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ input("Facebook","_facebook",setting['_facebook'].value ?? '',false,false,'..','url') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ input("Linkedin","_linkedin",setting['_linkedin'].value ?? '',false,false,'..','url') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ input("Youtube","_youtube",setting['_youtube'].value ?? '',false,false,'..','url') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ input("Twitter","_twitter",setting['_twitter'].value ?? '',false,false,'..','url') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content-item-footer">
+                            {{ button("Enrégistrer","primary",null,"submit") }}
+                        </div>
+                        <input type="hidden" name="_method" value="PUT"/>
+                    </form>
+                    <form method="post" class="tab-content-item" id="tab-4">
+                        <div class="tab-content-item-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ input("Email(/)","_email",setting['_email'].value ?? '') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ input("Numéro Téléphone(/)","_phone",setting['_phone'].value ?? '') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ input("Adresse postale","_postal",setting['_postal'].value ?? '') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ textarea("Addresse","_address",setting['_address'].value ?? '') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content-item-footer">
+                            {{ button("Enrégistrer","primary",null,"submit") }}
+                        </div>
+                        <input type="hidden" name="_method" value="PUT"/>
+                    </form>
+                    <form method="post" class="tab-content-item" id="tab-5">
+                        <div class="tab-content-item-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ input("Frais de livraison","_delivery_pay",setting['_delivery_pay'].value ?? '',false,false,'..','number',null,'','','FCFA') }}
+                                </div>
+                                <div class="col-12">
+                                    {{ input("Livraison gratuit à partir de","_delivery_free",setting['_delivery_free'].value ?? '',false,false,'..','number',null,'','','FCFA') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content-item-footer">
+                            {{ button("Enrégistrer","primary",null,"submit") }}
+                        </div>
+                        <input type="hidden" name="_method" value="PUT"/>
+                    </form>
+                </div>
+                <div class="tab-mask">
+                    <div class="tab-mask-bar">
+                       <span class="tab-mask-bar-item">
+                           <span></span>
+                       </span>
+                        <span class="tab-mask-bar-item">
+                           <span></span>
+                       </span>
+                        <span class="tab-mask-bar-item">
+                           <span></span>
+                       </span>
+                        <span class="tab-mask-bar-item">
+                           <span></span>
+                       </span>
+                        <span class="tab-mask-bar-item">
+                           <span></span>
+                       </span>
+                        <span class="tab-mask-bar-item">
+                           <span></span>
+                       </span>
+                    </div>
+                    <div class="tab-mask-content">
+                        <div class="tab-mask-content-item"></div>
+                        <div class="tab-mask-content-item"></div>
+                        <div class="tab-mask-content-item"></div>
+                        <div class="tab-mask-content-item"></div>
+                        <div class="tab-mask-content-item"></div>
+                        <div class="tab-mask-content-item"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('settings.index'),label:'Paramétres'}]) }}
+{% endblock %}
+{% block title %}
+    Paramétres
+{% endblock %}

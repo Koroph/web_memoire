@@ -1,0 +1,135 @@
+{% extends 'admin/layouts/index.html.twig' %}
+{% from 'admin/component.html.twig' import navigate,input,radio,select,checkbox,switchView,media_store,panel,group %}
+
+{% block content %}
+    {% set _content %}
+        <div class="row">
+            <div class="col-12">
+                {{ switchView("Status du compte","1","0",{name:'_status',value:user.isActivated,position:'end'}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ input("Nom","_lastname",{value:user.lastname,required:true,focus:true}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ input("Prénom","_firstname",{value:user.firstname,required:true}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {{ input("Identifiant de connexion","_username",{value:user.username,required:true}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ input("Contact","_contact",{value:user.contact,required:true,type:'tel'}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {% set _options %}
+                    <option></option>
+                    {% for item in  workFunction %}
+                        <option {% if user.workFunction != null and item.id == user.workFunction.id %} selected {% endif%} value="{{ item.id }}">
+                            {{ item.name }}
+                        </option>
+                    {% endfor %}
+                {% endset %}
+                {{ select("Fonction","_work_function_id",_options,{id:"service",hint:"Selectionner une fonction..."}) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {% set _options %}
+                    <option></option>
+                    {% for item in  services %}
+                        <option {% if  user.service != null and item.id == user.service.id %} selected {% endif%} value="{{ item.id }}">
+                            {{ item.name }}
+                        </option>
+                    {% endfor %}
+                {% endset %}
+                {{ select("Service","_service_id",_options,{id:"service",hint:"Selectionner un service..."}) }}
+            </div>
+        </div>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="kh-input-custom">
+                        <div style="margin: 8px 0;">
+                            {{ radio("Scolarité","_role","Scolarité",{checked: "Scolarité" == user.service }) }}
+                            {{ radio("Comptable","_role","Comptable",{checked: "Comptable" == user.service }) }}
+                            {{ radio("Financier","_role","Financier",{checked: "Financier" == user.service }) }}
+                            {{ radio("Resto-badge","_role","Resto-badge",{checked: "Resto-badge" == user.service }) }}
+                        </div>
+                        <label>
+                            Service
+                            <span>**</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="kh-input-custom">
+                        <div style="margin: 8px 0;overflow: hidden;">
+                            <div class="row">
+                                {% for item in roles_raw(user.roles) %}
+                                    <div class="col-12  col-sm-6 col-md-4 col-lg-3 col-xl-2 kh-group_item" style="margin-bottom: 16px;">
+                                        {{ group(item.label,item.name,{value:item.value}) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <label>
+                            Autorisation
+                            <span>**</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="kh-input-custom">
+                        <div style="margin: 8px 0;">
+                            {{ checkbox("Encodage","_pass[]","PASS_ENCODE",{checked: "PASS_ENCODE" in user.pass }) }}
+                            {{ checkbox("Rechargement","_pass[]","PASS_RECHARGE",{checked: "PASS_RECHARGE" in user.pass }) }}
+                        </div>
+                        <label>
+                            Autorisation application bureau
+                        </label>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% set password %}
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    {{ input("Mot de passe","_password","",{type:'password',required:true}) }}
+                </div>
+                <div class="col-12 col-md-6">
+                    {{ input("Comfirmez le mot de passe","_passwordConfirm","",{type:'password',required:true}) }}
+                </div>
+            </div>
+        {% endset %}
+        <div  style="margin-top: 16px;">
+            {{ panel('Modifier le mot de passe',password,{color:'danger',icon:'icon-lock',open:false}) }}
+        </div>
+    {% endset %}
+    {% set _image %}
+        <div style="width: 172px;height: 172px;background-color: #e7eced;">
+            {% set _url= user.image ? user.image.url : null %}
+            {{ media_store("_file",{url:_url,prefix:'_admin_',icon:'user',imgClass:'_img_header'}) }}
+        </div>
+    {% endset %}
+    {% embed "admin/components/insert-view.html.twig" with {method:'put',csrf:'_user_admin_update'} %}
+        {% block header %}
+            {{ _image }}
+        {% endblock %}
+        {% block body %} {{ _content }} {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block title %}
+    Comptes administrateurs
+{% endblock %}
+{% block navigate %}
+    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('user_admin.index'),label:'Comptes administrateurs'},{url:path('user_admin.edit',{ref:user.ref}),label:'Edition'}]) }}
+{% endblock %}
