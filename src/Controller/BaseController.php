@@ -153,21 +153,11 @@ abstract class BaseController extends AbstractController
 
     }
 
-    /**
-     * @return array[]
-     * @throws Exception|\Doctrine\DBAL\Driver\Exception
-     */
-    protected function getStudentData(): array
+
+
+    protected function redirectBack(Request $request): RedirectResponse
     {
-        /**
-         * @var $connection Connection
-         */
-        $connection = $this->getDoctrine()
-            ->getConnection();
-
-        $stmt = $connection->prepare(Query::STUDENT_SELECT_BY_NAME_AND_MATRICULE);
-
-       return $stmt->executeQuery()->fetchAllAssociative();
+        return $this->redirect($request->server->get("HTTP_REFERER"));
     }
 
 }

@@ -1,8 +1,8 @@
 {% extends 'admin/layouts/index.html.twig' %}
-{% from 'views.html' import navigate,state as vState %}
+{% from 'views.html' import navigate,state as vState,chart_view %}
 
 {% block content %}
-    {% embed "admin/components/index-view.html.twig" with {'header':['Désignation du matériel','Série','Marque','Statut'],add:path('equipment.create'),state:data.state,'info':[data.allCount,"Matériels informatiques enrégistrés"]} %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Désignation du matériel','Série','Marque','Etat du materiel'],add:is_granted("ROLE_SUPER_USER") ? path('equipment.create'):null,state:data.state,'info':[data.allCount,"Matériels informatiques enrégistrés"]} %}
         {% block body %}
             {% for equipment in data %}
                 <tr class="kh-t-row"
@@ -32,7 +32,7 @@
                             </div>
                         {% endif %}
                     </td>
-                    {{ tr_action(path('equipment.show',{id:equipment.id}),path('equipment.edit',{id:equipment.id}),path('equipment.destroy',{id:equipment.id,page:app.request.get('page') ?? 1})) | raw }}
+                    {{ tr_action(path('equipment.show',{id:equipment.id}),is_granted("ROLE_SUPER_USER") ? path('equipment.edit',{id:equipment.id}):null, is_granted("ROLE_SUPER_USER") ? path('equipment.destroy',{id:equipment.id,page:app.request.get('page') ?? 1}):null) | raw }}
                 </tr>
             {% endfor %}
         {% endblock %}

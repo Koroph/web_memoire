@@ -3,38 +3,24 @@
 
 {% block content %}
     <div class="row" style="justify-content: center;">
-        <div class="col-12" >
-            {{ chart_view(visitCounterData,{label:'Visites',type:'bar'}) }}
+        <div class="col-12">
+            {{ chart_view(stateData,{label:'Equipement informatique',type:'bar'}) }}
         </div>
     </div>
-    {#<div id="home">
-        <div class="home-item">
-            <div class="home-item-content">
-                <div class="home-item-content-svg">
-                    {% include 'svg/user.html.twig' %}
-                </div>
-                <h3>
-                    <strong>{{ admin }}</strong>
-                    Administrateur(s)
-                </h3>
-                <a href="#">
-                    <span></span>
-                    <span>Afficher tous les utilisateurs</span>
-                </a>
-            </div>
-        </div>
+    <div id="home">
+
         <div class="home-item">
             <div class="home-item-content">
                 <div class="home-item-content-svg">
                     {% include 'svg/team.html.twig' %}
                 </div>
                 <h3>
-                    <strong>{{ customer }}</strong>
-                    Client(s)
+                    <strong>{{ staff }}</strong>
+                    Personnel(s)
                 </h3>
-                <a href="#">
+                <a href="{{ path('user_admin.index') }}">
                     <span></span>
-                    <span>Afficher tous les clients</span>
+                    <span>Afficher la liste du personnel</span>
                 </a>
             </div>
         </div>
@@ -45,19 +31,34 @@
                 </div>
                 <h3>
                     <strong>
-                        {{ product }}
+                        {{ equipment }}
                     </strong>
-                    Produits enrégistré(s)
+                    Equipement(s)
                 </h3>
-                <a href="#">
+                <a href="{{ path('equipment.index') }}">
                     <span></span>
                     <span>
-                        Afficher tous les produits enrégistrés
+                        Afficher tous les equipements enrégistrés
                     </span>
                 </a>
             </div>
         </div>
-    </div>#}
+        <div class="home-item">
+            <div class="home-item-content">
+                <div class="home-item-content-svg">
+                    {% include 'svg/user.html.twig' %}
+                </div>
+                <h3>
+                    <strong>{{ maintainer }}</strong>
+                    Maintenancier(s)
+                </h3>
+                <a href="{{ path('maintainer.index') }}">
+                    <span></span>
+                    <span>Afficher tous des maintenancier(s)</span>
+                </a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block title %}

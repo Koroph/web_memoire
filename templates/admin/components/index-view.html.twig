@@ -1,7 +1,7 @@
 {% from 'admin/component.html.twig' import button,link %}
 <div id="index-view">
     <div id="index-view-header">
-        {% if add is defined %}
+        {% if add is defined and add is not null %}
             {{ link("Ajouter",{url:add,icon:'icon-plus',className:'success upper'}) }}
         {% endif %}
     </div>

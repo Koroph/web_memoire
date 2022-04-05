@@ -8,7 +8,7 @@
                 {% set _options %}
                     <option></option>
                     {% for item in  equipments %}
-                        {% if item.attributions|length > 0 %}
+                        {% if item.attributions|length > 0 and item.status == "be" %}
                             <option value="{{ item.id }}">
                                 {{ item.name }} -> {{ item.attributions|last.admin.lastname }} {{ item.attributions|last.admin.firstname }}
                             </option>

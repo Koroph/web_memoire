@@ -3,10 +3,11 @@
     <header id="kh-app-side-bar-header">
         <div>
             <div>
-                <img src="{{ asset('system/logo/64/logo.png') }}"
+                <img src="{{ asset('system/logo/128/logo.png') }}"
                      width="64"
                      height="64"
                      decoding="async"
+                     style="border-radius: 8px;"
                      alt="{{ app_name }}">
             </div>
             <strong>
@@ -15,10 +16,13 @@
         </div>
     </header>
     <div id="kh-app-side-bar-link">
-         {#{{ side_bar_link_item("Accueil","admin_home",{icon:'icon-home2'}) }}
-        <div class="divider"></div>#}
+        {% if is_granted("ROLE_SUPER_USER") %}
+         {{ side_bar_link_item("Accueil","admin_home",{icon:'icon-home2'}) }}
+        <div class="divider"></div>
+        {% endif %}
         {{ side_bar_link_item("Materiel","equipment",{icon:'icon-books'}) }}
         {{ side_bar_link_item("Panne","breakdown",{icon:'icon-stack'}) }}
+        {% if is_granted("ROLE_SUPER_USER") %}
         {{ side_bar_link_item("Maintenance","maintenance",{icon:'icon-price-tags'}) }}
         <div class="divider"></div>
         {{ side_bar_link_item("Personnel","user_admin",{icon:'icon-user-tie'}) }}
@@ -26,6 +30,7 @@
         {{ side_bar_link_item("Service","service",{icon:'icon-bookmarks'}) }}
         <div class="divider"></div>
         {{ side_bar_link_item("Maintenancier","maintainer",{icon:'icon-users'}) }}
+        {% endif %}
     </div>
 </div>
 

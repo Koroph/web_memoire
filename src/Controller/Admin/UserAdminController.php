@@ -215,9 +215,9 @@ class UserAdminController extends BaseController
     {
         switch ($roleName) {
             case "admin":
-                return ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+                return ["ROLE_ADMIN", "ROLE_SUPER_USER"];
             default:
-                return ['ROLE_ADMIN'];
+                return ["ROLE_ADMIN","ROLE_NORMAL_USER"];
         }
     }
 }

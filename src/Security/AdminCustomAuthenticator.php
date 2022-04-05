@@ -25,7 +25,7 @@ class AdminCustomAuthenticator extends AbstractFormLoginAuthenticator implements
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'admin_login';
-    public const HOME_ROUTE = 'equipment.index';
+    public const HOME_ROUTE = 'admin_home.index';
     public const SECURITY_SESSION_AUTH_KEY = "_security_main";
 
     private $entityManager;

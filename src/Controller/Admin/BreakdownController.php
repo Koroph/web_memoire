@@ -79,8 +79,21 @@ class BreakdownController extends BaseController
             } else throw new InvalidCsrfTokenException(self::CRSF_INVALIDE_MESSAGE);
         }
 
+        $data = [];
+        if ($this->isGranted("ROLE_SUPER_USER")) $data = $equipmentRepository->findAll();
+        else {
+            /**
+             * @var $user Admin
+             */
+            $user = $this->getUser();
+            foreach ($user->getAttributions() as $attribution) {
+                if (is_null($attribution->getEnd())) {
+                    $data[] = $attribution->getEquipment();
+                }
+            }
+        }
         return $this->render(__FUNCTION__, [
-            "equipments" => $equipmentRepository->findAll()
+            "equipments" => $data
         ]);
     }
 
@@ -93,7 +106,7 @@ class BreakdownController extends BaseController
      * @throws \Exception
      * @Route("/breakdown/edit/{id}",name="breakdown.edit",methods={"GET","PUT"})
      */
-    public function edit(Request $request, Breakdown $breakdown, ValidatorInterface $validator,EquipmentRepository $equipmentRepository): Response
+    public function edit(Request $request, Breakdown $breakdown, ValidatorInterface $validator, EquipmentRepository $equipmentRepository): Response
     {
         if ($request->getMethod() == "PUT") {
             if ($this->isCsrfTokenValid($this->csrf_update, $request->request->get('token'))) {
@@ -108,9 +121,22 @@ class BreakdownController extends BaseController
             } else throw new InvalidCsrfTokenException(self::CRSF_INVALIDE_MESSAGE);
         }
 
+        $data = [];
+        if ($this->isGranted("ROLE_SUPER_USER")) $data = $equipmentRepository->findAll();
+        else {
+            /**
+             * @var $user Admin
+             */
+            $user = $this->getUser();
+            foreach ($user->getAttributions() as $attribution) {
+                if (is_null($attribution->getEnd())) {
+                    $data[] = $attribution->getEquipment();
+                }
+            }
+        }
         return $this->render(__FUNCTION__, [
             'breakdown' => $breakdown,
-            'equipments' => $equipmentRepository->findAll()
+            'equipments' => $data
         ]);
     }
 

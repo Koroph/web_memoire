@@ -11,7 +11,9 @@
                         data-contact="{{ maintainer.contact }}"
                         data-date="{{ maintainer.created|date("d/m/Y") }}">
                         <td>{{ maintainer.name }}</td>
-                        <td style="width: 200px;">{{ maintainer.contact }}</td>
+                        <td style="width: 200px;">
+                            {{ maintainer.contact }}
+                        </td>
                         <td style="width: 200px;">
                             <span class=" icon-calendar"></span>
                             {{ maintainer.created|date("d/m/Y") }}

@@ -2,7 +2,7 @@
 {% from 'views.html' import navigate,state as vState %}
 
 {% block content %}
-    {% embed "admin/components/index-view.html.twig" with {'header':['Nom','Date de création',"Statut du matériel"],add:path('maintenance.create'),state:data.state,'info':[data.allCount,"Maintenances enrégistrés"]} %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Nom','Date de création',"Etat du matériel"],add:path('maintenance.create'),state:data.state,'info':[data.allCount,"Maintenances enrégistrés"]} %}
         {% block body %}
             {% for maintenance in data %}
                     <tr class="kh-t-row"

@@ -4,11 +4,15 @@ namespace App\Controller\Admin;
 
 use App\Controller\BaseController;
 use App\Controller\Utils\Notice;
+use App\Controller\Utils\Query;
+use App\Entity\Admin;
 use App\Entity\Attribution;
 use App\Entity\Equipment;
 use App\Entity\Files;
 use App\Repository\AdminRepository;
 use App\Repository\EquipmentRepository;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,10 +38,23 @@ class EquipmentController extends BaseController
      * @param EquipmentRepository $repository
      * @return Response
      */
-    public function index(Request $request,EquipmentRepository $repository): Response
+    public function index(EquipmentRepository $repository): Response
     {
+        $data=[];
+        if ($this->isGranted("ROLE_SUPER_USER")) $data = $repository->findAll();
+        else {
+            /**
+             * @var $user Admin
+             */
+            $user = $this->getUser();
+            foreach ($user->getAttributions() as $attribution){
+                if (is_null($attribution->getEnd())){
+                    $data[]=$attribution->getEquipment();
+                }
+            }
+        }
         return $this->render(__FUNCTION__, [
-            'data' => $this->paginate($repository->findAll())
+            'data' => $this->paginate($data)
         ]);
     }
 
@@ -136,12 +153,12 @@ class EquipmentController extends BaseController
     /**
      * @Route("status/edit/{id}/{status}",name="update.status")
      */
-    public function updateStatus(Request $request,Equipment $equipment, string $status,EntityManagerInterface $manager): RedirectResponse
+    public function updateStatus(Request $request, Equipment $equipment, string $status, EntityManagerInterface $manager): RedirectResponse
     {
         $equipment->setStatus($status);
         $manager->flush();
 
-        return $this->redirect($request->server->get("HTTP_REFERER"));
+        return $this->redirectBack($request);
     }
 
     /**

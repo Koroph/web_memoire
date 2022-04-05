@@ -1,7 +1,7 @@
 {% extends 'admin/layouts/index.html.twig' %}
 {% from 'views.html' import navigate,state as vState %}
 {% block content %}
-    {% embed "admin/components/index-view.html.twig" with {'header':['Désignation du matériel','Date de soumission',"Statut du matériel"],add:path('breakdown.create'),state:data.state,'info':[data.allCount,"Pannes enrégistrés"]} %}
+    {% embed "admin/components/index-view.html.twig" with {'header':['Désignation du matériel','Date de soumission',"Etat du matériel"],add:path('breakdown.create'),state:data.state,'info':[data.allCount,"Pannes enrégistrés"]} %}
         {% block body %}
             {% for breakdown in data %}
                     <tr class="kh-t-row"
