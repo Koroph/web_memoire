@@ -5,7 +5,7 @@
     {% set _image %}
         <div style="width: 172px;height: 172px;background-color: #e7eced;">
             {% set _url= equipment.image ? equipment.image.url : null %}
-            {{ media_store("_image",{url:_url,prefix:'_equipment_',icon:'user',imgClass:'_img_equipment'}) }}
+            {{ media_store("_image",{url:_url,prefix:'_equipment_',icon:'file',imgClass:'_img_equipment'}) }}
         </div>
     {% endset %}
     {% set _content %}

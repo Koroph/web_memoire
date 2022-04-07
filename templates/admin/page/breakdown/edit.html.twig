@@ -32,5 +32,5 @@
     Panne
 {% endblock %}
 {% block navigate %}
-    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'},{url:path('breakdown.edit',{id:breakdown.id}),label:'Edition'}]) }}
+    {{ navigate([{url:is_granted("ROLE_SUPER_USER")  ? path('admin_home.index'):null,label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'},{url:path('breakdown.edit',{id:breakdown.id}),label:'Edition'}]) }}
 {% endblock %}

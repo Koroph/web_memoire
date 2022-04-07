@@ -4,6 +4,25 @@
 
 {% block content %}
     {% set _body %}
+        <div>
+            {% if equipment.status == "be" %}
+                <div class="toggle-link enable">
+                    En bon état
+                </div>
+            {% elseif(equipment.status == "me") %}
+                <div class="toggle-link orange">
+                    En maintenance
+                </div>
+            {% elseif(equipment.status == "pe") %}
+                <div class="toggle-link warning">
+                    En Panne
+                </div>
+            {% else %}
+                <div class="toggle-link disable">
+                    A remplacer
+                </div>
+            {% endif %}
+        </div>
         {% if equipment.image %}
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4">
@@ -86,7 +105,7 @@
         {% endif %}
     {% endset %}
 
-    {% embed "admin/components/display-view.html.twig" with {edit:path('equipment.edit',{id:equipment.id}),delete:{url:path('equipment.destroy',{id:equipment.id})}} %}
+    {% embed "admin/components/display-view.html.twig" with {edit: is_granted("ROLE_SUPER_USER") ? path('equipment.edit',{id:equipment.id}):null,delete:is_granted("ROLE_SUPER_USER") ? {url:path('equipment.destroy',{id:equipment.id})}:null} %}
         {% block body %} {{ _body }} {% endblock %}
     {% endembed %}
 {% endblock %}
@@ -95,5 +114,5 @@
     Matériel informatique
 {% endblock %}
 {% block navigate %}
-    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('equipment.index'),label:'Matériels informatiques'},{url:path('equipment.show',{id:equipment.id}),label:'Informations'}]) }}
+    {{ navigate([{url: is_granted("ROLE_SUPER_USER") ? path('admin_home.index'): null,label:'Accueil'},{url:path('equipment.index'),label:'Matériels informatiques'},{url:path('equipment.show',{id:equipment.id}),label:'Informations'}]) }}
 {% endblock %}

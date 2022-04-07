@@ -43,5 +43,9 @@
     Matériels informatiques
 {% endblock %}
 {% block navigate %}
+    {% if is_granted("ROLE_SUPER_USER") %}
     {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('equipment.index'),label:'Matériels informatiques'}]) }}
+    {% else %}
+    {{ navigate([{url:path('equipment.index'),label:'Matériels informatiques'}]) }}
+   {% endif %}
 {% endblock %}

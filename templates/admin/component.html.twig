@@ -15,10 +15,12 @@ options={other={}}
     {% if links is iterable %}
         <div class="kh-app-body-content-link-nav-container">
             {% for link in links %}
-                <a href="{{ link.url }}"
-                   class="kh-app-body-content-link-nav-container-item">
-                    <span>{{ link.label|capitalize }}</span>
-                </a>
+                {% if link.url is defined and link.url is not null %}
+                    <a href="{{ link.url }}"
+                       class="kh-app-body-content-link-nav-container-item">
+                        <span>{{ link.label|capitalize }}</span>
+                    </a>
+                {% endif %}
             {% endfor %}
             {% if options.other is defined %}
                 <div style="flex: 1;"></div>
@@ -501,7 +503,7 @@ options={disabled,checked,value={label,value,disabled,checked}}
                         <div class="kh-checkbox">
                             <input
                                     {{ (item.disabled is defined and item.disabled) ? "disabled":"" }}
-                                    {{  (item.checked is defined and item.checked) ? "checked":"" }}
+                                    {{ (item.checked is defined and item.checked) ? "checked":"" }}
                                     class="_{{ base_id }}"
                                     name="_{{ name }}[]"
                                     id="_{{ _id }}_"

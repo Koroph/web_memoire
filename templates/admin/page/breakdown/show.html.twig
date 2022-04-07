@@ -4,6 +4,25 @@
 
 {% block content %}
     {% set _body %}
+        <div>
+            {% if breakdown.equipment.status == "be" %}
+                <div class="toggle-link enable">
+                    En bon état
+                </div>
+            {% elseif(breakdown.equipment.status == "me") %}
+                <div class="toggle-link orange">
+                    En maintenance
+                </div>
+            {% elseif(breakdown.equipment.status == "pe") %}
+                <div class="toggle-link warning">
+                    En Panne
+                </div>
+            {% else %}
+                <div class="toggle-link disable">
+                    A remplacer
+                </div>
+            {% endif %}
+        </div>
         <div class="row">
             <div class="col-12">
                 {{ text("Matériel",breakdown.equipment.name) }}
@@ -52,18 +71,19 @@
             </div>
         {% endif %}
 
-        {% set _action %}
-            <div style="display: flex;">
-                <div>
-                    {{ link("EN BONNE ETAT",{url:path("update.status",{id:breakdown.equipment.id,status:"be"}),className:'success upper'}) }}
+        {% if is_granted("ROLE_SUPER_USER") %}
+            {% set _action %}
+                <div style="display: flex;">
+                    <div>
+                        {{ link("EN BONNE ETAT",{url:path("update.status",{id:breakdown.equipment.id,status:"be"}),className:'success upper'}) }}
+                    </div>
+                    <div style="margin-left: 8px">
+                        {{ link("A REMPLACER",{url:path("update.status",{id:breakdown.equipment.id,status:"re"}),className:'danger upper'}) }}
+                    </div>
                 </div>
-                <div style="margin-left: 8px">
-                    {{ link("A REMPLACER",{url:path("update.status",{id:breakdown.equipment.id,status:"re"}),className:'danger upper'}) }}
-                </div>
-            </div>
-        {% endset %}
-
-        {{ text("Modification du status du materiel",_action|raw) }}
+            {% endset %}
+            {{ text("Modification du status du materiel",_action|raw) }}
+        {% endif %}
     {% endset %}
 
     {% embed "admin/components/display-view.html.twig" with {edit:path('breakdown.edit',{id:breakdown.id}),delete:breakdown.maintenance is null ? {url:path('breakdown.destroy',{id:breakdown.id})}:null} %}
@@ -75,5 +95,5 @@
     Information
 {% endblock %}
 {% block navigate %}
-    {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'},{url:path('breakdown.show',{id:breakdown.id}),label:'Informations'}]) }}
+    {{ navigate([{url: is_granted("ROLE_SUPER_USER")  ? path('admin_home.index'): null,label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'},{url:path('breakdown.show',{id:breakdown.id}),label:'Informations'}]) }}
 {% endblock %}

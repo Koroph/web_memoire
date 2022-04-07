@@ -26,6 +26,7 @@ class AdminCustomAuthenticator extends AbstractFormLoginAuthenticator implements
 
     public const LOGIN_ROUTE = 'admin_login';
     public const HOME_ROUTE = 'admin_home.index';
+    public const EQUIPMENT_ROUTE = 'equipment.index';
     public const SECURITY_SESSION_AUTH_KEY = "_security_main";
 
     private $entityManager;
@@ -93,11 +94,18 @@ class AdminCustomAuthenticator extends AbstractFormLoginAuthenticator implements
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
+        /**
+         * @var $user Admin
+         */
+        $user = $token->getUser();
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
 
-         return new RedirectResponse($this->urlGenerator->generate(self::HOME_ROUTE));
+        if (in_array("ROLE_NORMAL_USER",$user->getRoles())) return new RedirectResponse($this->urlGenerator->generate(self::EQUIPMENT_ROUTE));
+
+        return new RedirectResponse($this->urlGenerator->generate(self::HOME_ROUTE));
     }
 
     protected function getLoginUrl()

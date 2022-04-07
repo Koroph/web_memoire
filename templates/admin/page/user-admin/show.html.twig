@@ -40,7 +40,7 @@
         {{ dateView(user) }}
     {% endset %}
 
-    {% embed "admin/components/display-view.html.twig" with {edit:path('user_admin.edit',{ref:user.ref}),delete:{url:path('user_admin.destroy',{ref:user.ref})}} %}
+    {% embed "admin/components/display-view.html.twig" with {edit:is_granted("ROLE_SUPER_USER") ? path('user_admin.edit',{ref:user.ref}):null,delete:is_granted("ROLE_SUPER_USER")  ? {url:path('user_admin.destroy',{ref:user.ref})}:null} %}
         {% block body %} {{ _body }} {% endblock %}
     {% endembed %}
 {% endblock %}

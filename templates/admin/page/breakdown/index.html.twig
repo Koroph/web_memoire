@@ -32,7 +32,8 @@
                                 </div>
                             {% endif %}
                         </td>
-                        {{ tr_action(path('breakdown.show',{id:breakdown.id}),path('breakdown.edit',{id:breakdown.id}), breakdown.maintenance is null ? path('breakdown.destroy',{id:breakdown.id,page:app.request.get('page') ?? 1}):null) | raw }}
+                        {% set last_attr = breakdown.equipment.attributions|last %}
+                        {{ tr_action(path('breakdown.show',{id:breakdown.id}),last_attr is not null and last_attr.admin.id==app.user.id ? path('breakdown.edit',{id:breakdown.id}): null, breakdown.maintenance is null ? path('breakdown.destroy',{id:breakdown.id,page:app.request.get('page') ?? 1}):null) | raw }}
                     </tr>
             {% endfor %}
 
@@ -44,5 +45,9 @@
     Pannes
 {% endblock %}
 {% block navigate %}
+    {% if is_granted("ROLE_SUPER_USER") %}
     {{ navigate([{url:path('admin_home.index'),label:'Accueil'},{url:path('breakdown.index'),label:'Pannes'}]) }}
+    {% else %}
+    {{ navigate([{url:path('breakdown.index'),label:'Pannes'}]) }}
+   {% endif %}
 {% endblock %}
